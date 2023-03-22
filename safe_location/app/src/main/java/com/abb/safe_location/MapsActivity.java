@@ -76,10 +76,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
          */
+        ///*
         // 안전 비상벨 핑 찍기
         StringBuffer strBuffer = new StringBuffer();
         try {
-            InputStream is = getResources().openRawResource(R.raw.bells);
+            InputStream is = getResources().openRawResource(R.raw.bellyong);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = "";
             int i = 1;
@@ -87,8 +88,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 String[] l = line.split(",");
 
                 LatLng node = new LatLng(Float.parseFloat(l[0]), Float.parseFloat(l[1]));
-                if (37.506 > Float.parseFloat(l[0]) && Float.parseFloat(l[0]) > 37.3 &&
-                       127.028 > Float.parseFloat(l[1]) && Float.parseFloat(l[1]) > 126.8) {
+                //if (37.506 > Float.parseFloat(l[0]) && Float.parseFloat(l[0]) > 37.3 &&
+                //      127.028 > Float.parseFloat(l[1]) && Float.parseFloat(l[1]) > 126.8) {
                     MarkerOptions markerOptions = new MarkerOptions()
                             .icon(BitmapDescriptorFactory.defaultMarker(100f))  //마커색상지정
                             .title(Integer.toString(i) + " : " + l[0] + ", " + l[1])
@@ -96,7 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     System.out.println(l[0] + ", " + l[1]);
                     googleMap.addMarker(markerOptions);
-                }
+                //}
                 i = i + 1;
 
             }
@@ -106,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        //*/
         /* 여성지킴이집
         StringBuffer strBuffer = new StringBuffer();
         try {
@@ -205,8 +206,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        }
 
          */
-        LatLng SEOUL = new LatLng(37.500246, 127.024570); //37.56, 126.97 41.8847507, -88.2039607
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 16));
+        /*
+        StringBuffer strBuffer = new StringBuffer();
+        try {
+            InputStream is = getResources().openRawResource(R.raw.one);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line = "";
+            int i = 1;
+            while ((line = reader.readLine()) != null) {
+                String[] l = line.split(",");
+
+                LatLng node = new LatLng(Float.parseFloat(l[0]), Float.parseFloat(l[1]));
+                if (37.506 > Float.parseFloat(l[0]) && Float.parseFloat(l[0]) > 37.3 &&
+                        127.028 > Float.parseFloat(l[1]) && Float.parseFloat(l[1]) > 126.8) {
+
+
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.defaultMarker(100f))  //마커색상지정
+                            .title(Integer.toString(i) + " : " + l[0] + ", " + l[1])
+                            .position(node);   //마커위치
+
+                    //System.out.println(Integer.toString(i) + " : " + l[0] + ", " + l[1]);
+                    googleMap.addMarker(markerOptions);
+                }
+                i = i + 1;
+
+            }
+
+            reader.close();
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        StringBuffer tstrBuffer = new StringBuffer();
+        try {
+            InputStream iss = getResources().openRawResource(R.raw.two);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(iss));
+            String line = "";
+            int i = 1;
+            while ((line = reader.readLine()) != null) {
+                String[] l = line.split(",");
+
+                LatLng node = new LatLng(Float.parseFloat(l[0]), Float.parseFloat(l[1]));
+                if (37.506 > Float.parseFloat(l[0]) && Float.parseFloat(l[0]) > 37.3 &&
+                        127.028 > Float.parseFloat(l[1]) && Float.parseFloat(l[1]) > 126.8) {
+
+
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.defaultMarker(200f))  //마커색상지정
+                            .title('2'+Integer.toString(i) + " : " + l[0] + ", " + l[1])
+                            .position(node);   //마커위치
+
+                    //System.out.println(Integer.toString(i) + " : " + l[0] + ", " + l[1]);
+                    googleMap.addMarker(markerOptions);
+                }
+                i = i + 1;
+
+            }
+
+            reader.close();
+            iss.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+        LatLng me = new LatLng(37.515521,126.840513);
+        //LatLng SEOUL = new LatLng(37.500246, 127.024570); //37.56, 126.97 41.8847507, -88.2039607
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(me, 16));
 
     }
 }
