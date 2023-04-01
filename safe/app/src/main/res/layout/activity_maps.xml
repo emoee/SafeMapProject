@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="left"
-    android:fitsSystemWindows="true">
-
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+    <!--
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -20,9 +21,12 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/navigation_item"
-            app:menu="@menu/drawer_menu" />
+            app:menu="@menu/drawer_menu" >
+        </com.google.android.material.navigation.NavigationView>
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    -->
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
@@ -30,64 +34,88 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/idSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#CECECE"
+        android:elevation="5dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="Search Here" />
 
-            <Button
-                android:id="@+id/btn_navbar"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="#BFBFBF"
-                android:elevation="5dp"
-                android:text="-"
-                android:textSize="16sp" />
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/idSearchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="#BFBFBF"
-                android:elevation="5dp"
-                app:iconifiedByDefault="false"
-                app:queryHint="Search Here" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:orientation="horizontal">
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/btn_police"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="👮🏻‍"
+            android:textSize="10sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_home"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="🏘"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btn_bell"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="🔔"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#FFCECECE">
+
+        <Button
+            android:id="@+id/screenmap"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+            android:layout_margin="0sp"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:padding="0sp"
+            android:text="📍"
+            android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btn_police"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="👮🏻‍경찰서"
-                android:textSize="16sp" />
+        <Button
+            android:id="@+id/screenroute"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="0sp"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:padding="0sp"
+            android:text="🔎"
+            android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btn_home"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🏘지킴이집"
-                android:textSize="16sp" />
+        <Button
+            android:id="@+id/screensetting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="0sp"
+            android:layout_weight="1"
+            android:background="#00FFFFFF"
+            android:padding="0sp"
+            android:text="⚙️"
+            android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btn_bell"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🔔안전 비상벨"
-                android:textSize="16sp" />
-        </LinearLayout>
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </LinearLayout>
+
 
 </RelativeLayout>
