@@ -1,13 +1,13 @@
 package com.abb.safe;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.abb.safe.routeFragment.sRoutesFragment;
 
 public class RoutesActivity extends AppCompatActivity {
 
@@ -29,37 +29,22 @@ public class RoutesActivity extends AppCompatActivity {
         screenmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("오류 생김1");
-                }
-
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
             }
         });
         screenroute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("오류 생김2");
-                }
-
+                Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
+                startActivity(intent);
             }
         });
         screensetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("오류 생김3");
-                }
-
+                Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -72,7 +57,7 @@ public class RoutesActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle(); // 번들을 통해 값 전달
                     bundle.putString("route","routesafe1");//번들에 넘길 값 저장
                     sRoutesFragment routesFragment = new sRoutesFragment();
-                    routesFragment.setArguments(bundle);
+                    routesFragment.setArguments(bundle); //보내기
                     getSupportFragmentManager().beginTransaction().replace(R.id.frame,routesFragment).commit();
 
                 } catch (Exception e) {

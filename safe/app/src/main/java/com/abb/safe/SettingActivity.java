@@ -27,37 +27,22 @@ public class SettingActivity extends AppCompatActivity {
         screenmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("오류 생김1");
-                }
-
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(intent);
             }
         });
         screenroute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("오류 생김2");
-                }
-
+                Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
+                startActivity(intent);
             }
         });
         screensetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    System.out.println("오류 생김3");
-                }
-
+                Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
+                startActivity(intent);
             }
         });
     }
