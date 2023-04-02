@@ -1,4 +1,4 @@
-package com.abb.safe;
+package com.abb.safe.routeFragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.abb.safe.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,13 +42,6 @@ public class sRoutesFragment extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         RootView = inflater.inflate(R.layout.fragment_sroutes, container, false);
         mapView = (MapView) RootView.findViewById(R.id.mapview);
-        if (getArguments().getString("name") == "routesafe1")
-        {
-
-        }
-        else {
-            Log.d("오류", "onMapReady: ");
-        }
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
