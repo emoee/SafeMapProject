@@ -1,0 +1,36 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id btn_cancel
+id btn_fdlogin
+id btn_fdpw
+id btn_login
+id btn_register
+id et_birth
+id et_id
+id et_name
+id et_pass
+id textView
+id textView3
+id textView5
+id tv_id
+id tv_pass
+layout activity_find
+layout activity_find_pw
+layout activity_login
+layout activity_main
+layout activity_register
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style Theme.RegisterLoginExample
+xml backup_rules
+xml data_extraction_rules

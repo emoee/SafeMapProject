@@ -1,0 +1,102 @@
+[
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\layout_activity_find_login.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\layout\\activity_find_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-anydpi-v33_ic_launcher.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-anydpi-v33\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\xml\\backup_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\layout_activity_find.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\layout\\activity_find.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-hdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.registerloginexample.app-merged_res-29:/layout_activity_find_pw.xml.flat",
+        "source": "com.example.registerloginexample.app-main-31:/layout/activity_find_pw.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "com.example.registerloginexample.app-merged_res-29:/layout_activity_find.xml.flat",
+        "source": "com.example.registerloginexample.app-main-31:/layout/activity_find.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.example.registerloginexample.app-merged_res-29:/layout_activity_login.xml.flat",
+        "source": "com.example.registerloginexample.app-main-31:/layout/activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-merged_res-29:\\drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\cyj01\\.gradle\\daemon\\7.5\\com.example.registerloginexample.app-main-31:\\drawable-v24\\ic_launcher_foreground.xml"
+    }
+]
