@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "767205424578",
+    "project_id": "safe-navigation-app-6fc08",
+    "storage_bucket": "safe-navigation-app-6fc08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767205424578:android:ab46bc2747ea97a453ea5b",
+        "android_client_info": {
+          "package_name": "com.abb.safe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767205424578-q7hmv5lol12sde13pdpr83tfr1hli87d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSyo0-2dpgCO-7I_IYLvTBEUP-4JSqSOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767205424578-q7hmv5lol12sde13pdpr83tfr1hli87d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
