@@ -17,7 +17,6 @@ import android.widget.Button;
 //import android.widget.SearchView;
 import androidx.appcompat.widget.SearchView;
 
-import com.abb.safe.MyFunction.CustomMapClusterRenderer;
 import com.abb.safe.MyFunction.MyCluster;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -204,7 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //LatLng me = new LatLng(37.515521,126.840513);
         LatLng SEOUL = new LatLng(37.500246, 127.024570); //37.56, 126.97 41.8847507, -88.2039607
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL,10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL,13));
     }
 
     //marker POI 찍기
