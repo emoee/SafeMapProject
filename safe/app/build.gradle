@@ -44,6 +44,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     //cluster map marker
     implementation 'com.google.maps.android:android-maps-utils:0.6.2'
+
     //firebase
     implementation platform('com.google.firebase:firebase-bom:31.3.0')
     implementation 'com.google.firebase:firebase-auth-ktx'

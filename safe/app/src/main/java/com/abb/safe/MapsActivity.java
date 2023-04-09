@@ -1,15 +1,23 @@
 package com.abb.safe;
 
 import static android.app.PendingIntent.getActivity;
+import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,24 +34,32 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.abb.safe.databinding.ActivityMapsBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback //, NavigationView.OnNavigationItemSelectedListener
 {
-
     private GoogleMap mMap;
+    private FirebaseFirestore db;
     ClusterManager clusterManager;
-    //MyRenderer clusterRenderer;
     SearchView searchView;
     private ActivityMapsBinding binding;
     Button screenroute;
@@ -52,15 +68,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btn_police;
     Button btn_home;
     Button btn_bell;
-    //Button btn_open;
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
+    String email;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //위치 가져와서 저장하기
+        final LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(MapsActivity.this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION}, 0 );}
+        else {
+            Location location = LocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                double longitude = location.getLongitude();
+                double latitude = location.getLatitude();
+                Log.d(TAG, "GPS onCreate: " + longitude + latitude);
+                setGPSData(longitude, latitude);
+            }
+            LocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,300f, locationListener);
+        }
 
         //메뉴 버튼 설정
         //map 기본 메인 화면
@@ -263,6 +293,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             markerOptions.snippet(item.getSnippet());
             super.onBeforeClusterItemRendered(item, markerOptions);
+        }
+    }
+    final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            setGPSData(longitude, latitude);
+        }
+    };
+    public void setGPSData(double lon, double lat){
+        //firebase date setting
+        db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            email = user.getEmail();
+            Map<String, Object> data = new HashMap<>();
+            data.put("id",email);
+            data.put("lon", lon);
+            data.put("lat", lat);
+            if (db.collection("GPS").document(email).get() != null){
+                db.collection("GPS").document(email).set(data);}
+            else{
+                db.collection("GPS").document(email).update(data);}
+            Log.d(TAG, "setGPSData: " + data);
         }
     }
 }

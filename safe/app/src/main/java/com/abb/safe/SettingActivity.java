@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,7 +39,7 @@ public class SettingActivity extends AppCompatActivity {
     Button screenroute;
     Button screenmap;
     Button screensetting;
-    String ID;
+    String email;
     String member[];
     String name;
     String birth;
@@ -71,7 +72,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-
         //메뉴 버튼 설정
         //map 기본 메인 화면
         screenmap = findViewById(R.id.screenmap);
@@ -103,30 +103,25 @@ public class SettingActivity extends AppCompatActivity {
     public void userData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            String email = user.getEmail();
-            db.collection("members")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            email = user.getEmail();
+            DocumentReference docRef = db.collection("members").document(email);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            // 데이터를 가져오는 작업이 잘 동작했을 떄
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    if(document.getData().get("id").equals(email)){
-                                        ID = document.getId();
-                                        member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
-                                        Log.d(TAG, "onComplete: " + member);
-                                        userShow();
-                                    }
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
+                                    member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                                    userShow();
+                                } else {
+                                    Log.d(TAG, "No such document");
                                 }
-                            }
-                            // 데이터를 가져오는 작업이 에러났을 때
-                            else {
-                                Log.w(TAG, "Error => ", task.getException());
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
                         }
                     });
-
         }
     }
 
@@ -144,7 +139,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void updateGpsShare(String gps){
-        DocumentReference updateDB = db.collection("members").document(ID);
+        DocumentReference updateDB = db.collection("members").document(email);
         updateDB.update("gpsShare", gps)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

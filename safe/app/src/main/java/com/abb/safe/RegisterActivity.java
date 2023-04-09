@@ -92,18 +92,18 @@ public class RegisterActivity extends AppCompatActivity {
                             data.put("birth", birth);
                             data.put("gpsShare", gpsCheck);
 
-                            db.collection("members")
-                                    .add(data)
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            db.collection("members").document(email)
+                                    .set(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onSuccess(DocumentReference documentReference) {
-                                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully written!");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error adding document", e);
+                                            Log.w(TAG, "Error writing document", e);
                                         }
                                     });
 
