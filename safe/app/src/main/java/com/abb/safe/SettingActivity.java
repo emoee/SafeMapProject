@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.abb.safe.Fragment.GuardianFragment;
+import com.abb.safe.Fragment.sRoutesFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +41,7 @@ public class SettingActivity extends AppCompatActivity {
     Button screenroute;
     Button screenmap;
     Button screensetting;
+    Button btn_setguardian;
     String email;
     String member[];
     String name;
@@ -71,6 +74,24 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //보호자 정보 등록하기
+        btn_setguardian = findViewById(R.id.btn_setguardian);
+        btn_setguardian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    GuardianFragment guardianFragment = new GuardianFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameGuardian,guardianFragment).commit();
+
+                } catch (Exception e) {
+                    System.out.println("프레임 오류 생김");
+                }
+
+            }
+        });
+
+
 
         //메뉴 버튼 설정
         //map 기본 메인 화면
