@@ -1,0 +1,424 @@
+{
+ "data" : [
+  {
+   "latitude": 37.498657240514,
+   "longitude": 127.024420058306,
+   "safety grade": 0.17
+  },
+  {
+   "latitude": 37.4988725539075,
+   "longitude": 127.025133090251,
+   "safety grade": 0.49
+  },
+  {
+   "latitude": 37.4990341471709,
+   "longitude": 127.025151583118,
+   "safety grade": 0.49
+  },
+  {
+   "latitude": 37.5015395024261,
+   "longitude": 127.022159106578,
+   "safety grade": 0.68
+  },
+  {
+   "latitude": 37.4990690742862,
+   "longitude": 127.025791626707,
+   "safety grade": 1.71
+  },
+  {
+   "latitude": 37.499304005069,
+   "longitude": 127.026066657114,
+   "safety grade": 2.05
+  },
+  {
+   "latitude": 37.499272171571,
+   "longitude": 127.025931670845,
+   "safety grade": 2.35
+  },
+  {
+   "latitude": 37.4992164568664,
+   "longitude": 127.025721690308,
+   "safety grade": 1.72
+  },
+  {
+   "latitude": 37.4990634982954,
+   "longitude": 127.025292956444,
+   "safety grade": 0.49
+  },
+  {
+   "latitude": 37.4991247965651,
+   "longitude": 127.025966613384,
+   "safety grade": 2.32
+  },
+  {
+   "latitude": 37.4985546270174,
+   "longitude": 127.023326001893,
+   "safety grade": 1.88
+  },
+  {
+   "latitude": 37.4992322585563,
+   "longitude": 127.026311587041,
+   "safety grade": 2.11
+  },
+  {
+   "latitude": 37.4993237901919,
+   "longitude": 127.026646557854,
+   "safety grade": 0.91
+  },
+  {
+   "latitude": 37.4986280376186,
+   "longitude": 127.02354114182,
+   "safety grade": 2.28
+  },
+  {
+   "latitude": 37.4994950706731,
+   "longitude": 127.026576631368,
+   "safety grade": 1.2
+  },
+  {
+   "latitude": 37.4992744908433,
+   "longitude": 127.023215593213,
+   "safety grade": 0.48
+  },
+  {
+   "latitude": 37.501499969587,
+   "longitude": 127.023990733431,
+   "safety grade": 4.6
+  },
+  {
+   "latitude": 37.5018082615518,
+   "longitude": 127.025011144979,
+   "safety grade": 14.01
+  },
+  {
+   "latitude": 37.5017055109387,
+   "longitude": 127.024611591138,
+   "safety grade": 10.71
+  },
+  {
+   "latitude": 37.5016909716569,
+   "longitude": 127.023874011923,
+   "safety grade": 3.08
+  },
+  {
+   "latitude": 37.5020239905955,
+   "longitude": 127.023720455932,
+   "safety grade": 0.15
+  },
+  {
+   "latitude": 37.5026998240174,
+   "longitude": 127.023401049846,
+   "safety grade": 0.08
+  },
+  {
+   "latitude": 37.4992108698351,
+   "longitude": 127.023018893504,
+   "safety grade": 0.38
+  },
+  {
+   "latitude": 37.4994951313111,
+   "longitude": 127.02174055583,
+   "safety grade": 0.03
+  },
+  {
+   "latitude": 37.499504861235,
+   "longitude": 127.022084750024,
+   "safety grade": 0.04
+  },
+  {
+   "latitude": 37.5026847864391,
+   "longitude": 127.025091342321,
+   "safety grade": 0.76
+  },
+  {
+   "latitude": 37.502532968734,
+   "longitude": 127.025158903265,
+   "safety grade": 2.25
+  },
+  {
+   "latitude": 37.5019256948425,
+   "longitude": 127.025441437255,
+   "safety grade": 6.78
+  },
+  {
+   "latitude": 37.5020579265169,
+   "longitude": 127.025367724317,
+   "safety grade": 5.26
+  },
+  {
+   "latitude": 37.5022097404027,
+   "longitude": 127.02531860371,
+   "safety grade": 5.59
+  },
+  {
+   "latitude": 37.4998601850546,
+   "longitude": 127.026417593026,
+   "safety grade": 2.97
+  },
+  {
+   "latitude": 37.5024502409954,
+   "longitude": 127.022589631847,
+   "safety grade": 0.09
+  },
+  {
+   "latitude": 37.5024105349007,
+   "longitude": 127.025214180797,
+   "safety grade": 4.96
+  },
+  {
+   "latitude": 37.5028271526638,
+   "longitude": 127.023351917212,
+   "safety grade": 1.58
+  },
+  {
+   "latitude": 37.5024303257213,
+   "longitude": 127.024243038195,
+   "safety grade": 3.16
+  },
+  {
+   "latitude": 37.5024106401184,
+   "longitude": 127.024716313306,
+   "safety grade": 4.99
+  },
+  {
+   "latitude": 37.4997152918086,
+   "longitude": 127.022797781843,
+   "safety grade": 0.33
+  },
+  {
+   "latitude": 37.5006737956835,
+   "longitude": 127.026042779253,
+   "safety grade": 0.58
+  },
+  {
+   "latitude": 37.5009394635958,
+   "longitude": 127.025923047356,
+   "safety grade": 1.08
+  },
+  {
+   "latitude": 37.5010889040893,
+   "longitude": 127.025844952668,
+   "safety grade": 1.7
+  },
+  {
+   "latitude": 37.5013379703215,
+   "longitude": 127.025720003938,
+   "safety grade": 3.24
+  },
+  {
+   "latitude": 37.5015372195879,
+   "longitude": 127.025636715677,
+   "safety grade": 3.8
+  },
+  {
+   "latitude": 37.5016326980611,
+   "longitude": 127.025574230786,
+   "safety grade": 6.47
+  },
+  {
+   "latitude": 37.5017406239437,
+   "longitude": 127.025532589181,
+   "safety grade": 6.47
+  },
+  {
+   "latitude": 37.4989068738802,
+   "longitude": 127.025223181042,
+   "safety grade": 0.49
+  },
+  {
+   "latitude": 37.4989381207717,
+   "longitude": 127.025368445997,
+   "safety grade": 0.39
+  },
+  {
+   "latitude": 37.4991765268269,
+   "longitude": 127.026181591531,
+   "safety grade": 2.14
+  },
+  {
+   "latitude": 37.4984713739021,
+   "longitude": 127.023356706946,
+   "safety grade": 1.88
+  },
+  {
+   "latitude": 37.4983146540981,
+   "longitude": 127.023454996965,
+   "safety grade": 1.85
+  },
+  {
+   "latitude": 37.4983782670017,
+   "longitude": 127.023688571784,
+   "safety grade": 1.85
+  },
+  {
+   "latitude": 37.49857905405,
+   "longitude": 127.023614880827,
+   "safety grade": 2.28
+  },
+  {
+   "latitude": 37.4990096823415,
+   "longitude": 127.025059381404,
+   "safety grade": 0.48
+  },
+  {
+   "latitude": 37.5017990613311,
+   "longitude": 127.022030107571,
+   "safety grade": 0.98
+  },
+  {
+   "latitude": 37.5013240637364,
+   "longitude": 127.022029968014,
+   "safety grade": 0.65
+  },
+  {
+   "latitude": 37.5011134805508,
+   "longitude": 127.02212210224,
+   "safety grade": 0.61
+  },
+  {
+   "latitude": 37.5008490269474,
+   "longitude": 127.022238805529,
+   "safety grade": 0.91
+  },
+  {
+   "latitude": 37.5009126445639,
+   "longitude": 127.022460094433,
+   "safety grade": 0.91
+  },
+  {
+   "latitude": 37.5012211784571,
+   "longitude": 127.022300380055,
+   "safety grade": 0.61
+  },
+  {
+   "latitude": 37.500741287413,
+   "longitude": 127.022281798206,
+   "safety grade": 0.31
+  },
+  {
+   "latitude": 37.5004224137376,
+   "longitude": 127.025152048766,
+   "safety grade": 19.72
+  },
+  {
+   "latitude": 37.5005327726517,
+   "longitude": 127.025589484796,
+   "safety grade": 13.79
+  },
+  {
+   "latitude": 37.5003886792339,
+   "longitude": 127.022453791143,
+   "safety grade": 0.31
+  },
+  {
+   "latitude": 37.4999135882384,
+   "longitude": 127.022939207215,
+   "safety grade": 0.63
+  },
+  {
+   "latitude": 37.5002462449789,
+   "longitude": 127.024586526831,
+   "safety grade": 6.12
+  },
+  {
+   "latitude": 37.5001116895127,
+   "longitude": 127.024057898828,
+   "safety grade": 0.15
+  },
+  {
+   "latitude": 37.4999156732586,
+   "longitude": 127.024740076146,
+   "safety grade": 1.67
+  },
+  {
+   "latitude": 37.4998475218838,
+   "longitude": 127.022724066413,
+   "safety grade": 0.63
+  },
+  {
+   "latitude": 37.5015952821224,
+   "longitude": 127.025850336999,
+   "safety grade": 3.76
+  },
+  {
+   "latitude": 37.4999396550509,
+   "longitude": 127.026960433663,
+   "safety grade": 0.91
+  },
+  {
+   "latitude": 37.5004477691342,
+   "longitude": 127.026719326902,
+   "safety grade": 0.84
+  },
+  {
+   "latitude": 37.5007727789376,
+   "longitude": 127.026564327394,
+   "safety grade": 0.8
+  },
+  {
+   "latitude": 37.5010726105619,
+   "longitude": 127.02642655278,
+   "safety grade": 1.15
+  },
+  {
+   "latitude": 37.50301,
+   "longitude": 127.026739999999,
+   "safety grade": 1.62
+  },
+  {
+   "latitude": 37.50276,
+   "longitude": 127.02685,
+   "safety grade": 1.59
+  },
+  {
+   "latitude": 37.5023,
+   "longitude": 127.02644,
+   "safety grade": 4.67
+  },
+  {
+   "latitude": 37.5020499999999,
+   "longitude": 127.02697,
+   "safety grade": 3.09
+  },
+  {
+   "latitude": 37.5010177306921,
+   "longitude": 127.026222584853,
+   "safety grade": 1.09
+  },
+  {
+   "latitude": 37.5026885016889,
+   "longitude": 127.025648653306,
+   "safety grade": 1.92
+  },
+  {
+   "latitude": 37.5023245808583,
+   "longitude": 127.025835245566,
+   "safety grade": 1.93
+  },
+  {
+   "latitude": 37.5020133059495,
+   "longitude": 127.025978765985,
+   "safety grade": 1.97
+  },
+  {
+   "latitude": 37.5016608324181,
+   "longitude": 127.026142378639,
+   "safety grade": 1.95
+  },
+  {
+   "latitude": 37.5012946234715,
+   "longitude": 127.026323220093,
+   "safety grade": 0.47
+  },
+  {
+   "latitude": 37.50174,
+   "longitude": 127.02671,
+   "safety grade": 0.15
+  },
+  {
+   "latitude": 37.50285,
+   "longitude": 127.02618,
+   "safety grade": 3.06
+  }
+ ]
+}
