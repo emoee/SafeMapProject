@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.abb.safe.routeFragment.sRoutesFragment;
+import com.abb.safe.Fragment.sRoutesFragment;
 
 public class RoutesActivity extends AppCompatActivity {
 
