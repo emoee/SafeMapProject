@@ -1,17 +1,17 @@
 package com.abb.safe;
 
-import static android.app.PendingIntent.getActivity;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 //import android.widget.SearchView;
 import androidx.appcompat.widget.SearchView;
 
@@ -34,25 +35,35 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.abb.safe.databinding.ActivityMapsBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+import com.google.maps.android.heatmaps.Gradient;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback //, NavigationView.OnNavigationItemSelectedListener
@@ -68,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btn_police;
     Button btn_home;
     Button btn_bell;
+    Button btn_alcol;
+    Button btn_heatmap;
     String email;
 
 
@@ -194,6 +207,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btn_police= (Button)findViewById(R.id.btn_police);
         btn_home = (Button)findViewById(R.id.btn_home);
         btn_bell = (Button)findViewById(R.id.btn_bell);
+        btn_alcol = (Button)findViewById(R.id.btn_alcol);
+        btn_heatmap = (Button) findViewById(R.id.btn_heatmap);
         btn_police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,6 +231,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.clear();
                 clusterManager.clearItems();
                 setMarkerCluster("bells");
+            }
+        });
+        btn_alcol.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mMap.clear();
+                clusterManager.clearItems();
+                setMarkerCluster("alcol");
+            }
+        });
+        btn_heatmap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMap.clear();
+                clusterManager.clearItems();
+                buildheatmap();
             }
         });
     }
@@ -249,6 +280,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             else if (name == "safehouse"){
                 is = getResources().openRawResource(R.raw.safehouse);
+            }
+            else if (name == "alcol"){
+                is = getResources().openRawResource(R.raw.alcol);
             }
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = "";
@@ -290,11 +324,84 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(120f));
             } else if (item.getTitle() == "safehouse") {
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(330f));
+            } else if (item.getTitle() == "alcol") {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(60f));
             }
             markerOptions.snippet(item.getSnippet());
             super.onBeforeClusterItemRendered(item, markerOptions);
         }
     }
+
+    //heatmap setting
+    int[] colors = {
+            Color.rgb(102, 225, 0), // green
+            Color.rgb(255, 0, 0)    // red
+    };
+    float[] startpoints = {
+            0.2f, 1f
+    };
+
+    //히트맵 표시할 자료 json파일 불러와서 추가하기.
+    private ArrayList addheatmap() {
+        ArrayList<WeightedLatLng> arr = new ArrayList<>();
+        String lat = "";
+        String lon = "";
+        String weight = "";
+        //json 자료 가져오기
+        String json = "";
+        try {
+            InputStream is = getAssets().open("heatMap.json"); // json파일 이름
+            int fileSize = is.available();
+
+            byte[] buffer = new byte[fileSize];
+            is.read(buffer);
+            is.close();
+
+            //json파일명을 가져와서 String 변수에 담음
+            json = new String(buffer, "UTF-8");
+            Log.d("--  json = ", json);
+
+
+            JSONObject jsonObject = new JSONObject(json);
+
+            //배열로된 자료를 가져올때
+            JSONArray Array = jsonObject.getJSONArray("data");//배열의 이름
+            for(int i=0; i<Array.length(); i++)
+            {
+                JSONObject Object = Array.getJSONObject(i);
+                lat = Object.getString("latitude");
+                lon = Object.getString("longitude");
+                weight = Object.getString("safety grade");
+                arr.add(new WeightedLatLng(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), Float.parseFloat(weight))); //madurai
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //arr.add(new WeightedLatLng(new LatLng(9.9252, 78.119),10)); //madurai
+
+        Log.e("adding heatmap","yes");
+
+        return arr;
+    }
+
+    //heatmap show
+    private void buildheatmap(){
+        Gradient gradient = new Gradient(colors,startpoints);
+        HeatmapTileProvider heatmapTileProvider = new HeatmapTileProvider.Builder()
+                .weightedData(addheatmap())
+                .radius(20)
+                .gradient(gradient)
+                .build();
+        TileOverlayOptions tileoverlayoptions = new TileOverlayOptions().tileProvider(heatmapTileProvider);
+        TileOverlay tileoverlay = mMap.addTileOverlay(tileoverlayoptions);
+        tileoverlay.clearTileCache();
+        Toast.makeText(this,"added heatmap",Toast.LENGTH_SHORT).show();
+    }
+
+
     final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
