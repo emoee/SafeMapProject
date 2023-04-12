@@ -6,18 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.abb.safe.Fragment.GuardianFragment;
-import com.abb.safe.Fragment.sRoutesFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,10 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -62,30 +55,29 @@ public class SettingActivity extends AppCompatActivity {
         gpsStatus = findViewById(R.id.gps_status);
         userData(); //update user account information
 
-        //gps 동의 여부 수정 가능하도록 스위치 버튼 추가
+        //Change of GPS information consent
         gpsStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // 스위치 버튼이 체크되었는지 검사하여 db 수정
                 if (isChecked){
-                    updateGpsShare("true");
+                    updateGpsShare("true"); //database modification
                 }else{
                     updateGpsShare("false");
                 }
             }
         });
 
-        //보호자 정보 등록하기
+        //Registration of guardian information
         btn_setguardian = findViewById(R.id.btn_setguardian);
         btn_setguardian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     GuardianFragment guardianFragment = new GuardianFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameGuardian,guardianFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameGRegister,guardianFragment).commit();
 
                 } catch (Exception e) {
-                    System.out.println("프레임 오류 생김");
+                    System.out.println("frame error");
                 }
 
             }
@@ -93,8 +85,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
 
-        //메뉴 버튼 설정
-        //map 기본 메인 화면
+        // menu button
         screenmap = findViewById(R.id.screenmap);
         screenroute = findViewById(R.id.screenroute);
         screensetting = findViewById(R.id.screensetting);
@@ -121,6 +112,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
     }
+    //Get user information from database
     public void userData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -145,7 +137,7 @@ public class SettingActivity extends AppCompatActivity {
                     });
         }
     }
-
+    //Display user information
     public void userShow(){
         for (int i = 0; i < member.length; i++){
             if (member[i].split("=")[0].equals("name")) name = member[i].split("=")[1];
@@ -159,6 +151,7 @@ public class SettingActivity extends AppCompatActivity {
         else gpsStatus.setChecked(false);
     }
 
+    //Change of GPS information consent from database
     public void updateGpsShare(String gps){
         DocumentReference updateDB = db.collection("members").document(email);
         updateDB.update("gpsShare", gps)
