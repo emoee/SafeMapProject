@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +15,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.abb.safe.Fragment.GRegisterFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -34,14 +35,17 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editTextPassword;
     private EditText editTextName;
     private EditText editTextBirth;
+    private Button btn_gshow;
     private Button buttonJoin;
     private Button buttonJoin_login;
+    public static Context context;
     CheckBox gpsLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        context = this;
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         gpsLoc = findViewById(R.id.checkbox_gps);
@@ -51,20 +55,34 @@ public class RegisterActivity extends AppCompatActivity {
         editTextName = (EditText) findViewById(R.id.editText_name);
         editTextBirth = (EditText) findViewById(R.id.editText_birth);
 
+        btn_gshow = (Button) findViewById(R.id.btn_gshow);
         buttonJoin = (Button) findViewById(R.id.btn_join);
         buttonJoin_login = (Button) findViewById(R.id.btn_join_login);
+        btn_gshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    //Sign up for a guardian account
+                    GRegisterFragment gRegisterFragment = new GRegisterFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameGRegister,gRegisterFragment).commit();
+
+                } catch (Exception e) {
+                    System.out.println("프레임 오류 생김");
+                }
+
+            }
+        });
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!editTextEmail.getText().toString().equals("") && !editTextPassword.getText().toString().equals("")) {
-                    // 이메일과 비밀번호가 공백이 아닌 경우
-                    if (gpsLoc.isChecked()) {
+                    //email & password not blank
+                    if (gpsLoc.isChecked()) { //Consent to provide gps information
                         createUser(editTextEmail.getText().toString(), editTextPassword.getText().toString(), editTextName.getText().toString(), editTextBirth.getText().toString(), true);
                     } else {
                         createUser(editTextEmail.getText().toString(), editTextPassword.getText().toString(), editTextName.getText().toString(), editTextBirth.getText().toString(), false);
                     }
                 } else {
-                    // 이메일과 비밀번호가 공백인 경우
                     Toast.makeText(RegisterActivity.this, "계정과 비밀번호를 입력하세요.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -72,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
         buttonJoin_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // LoginActivity connection
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -79,13 +98,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void createUser(String email, String password, String name, String birth, boolean gpsCheck) {
+    public void createUser(String email, String password, String name, String birth, boolean gpsCheck) {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // 회원가입 성공시 db에 데이터 저장
+                            //Save database when membership registration is successful
                             Map<String, Object> data = new HashMap<>();
                             data.put("id", email);
                             data.put("name", name);
@@ -109,12 +128,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                             Log.d("sign up", "onComplete: "+task.getResult());
                             Toast.makeText(RegisterActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+                            // LoginActivity connection
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
-                            // 계정이 중복된 경우, 이메일 형식이아니거나, 비밀번호가 6자리 이상이 아닐 때 발생
-                            Toast.makeText(RegisterActivity.this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show();
+                            // Duplicate account, out of email format, password less than 6 digits
+                            Log.d(TAG, "onComplete: false");
+                            Toast.makeText(RegisterActivity.this, "이미 존재하는 계정 혹은 비밀번호를 변경해주세요.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
