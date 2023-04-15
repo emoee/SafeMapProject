@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!--unity-->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -31,6 +36,9 @@
         <activity
             android:name=".RoutesActivity"
             android:exported="false" />
+        <activity
+            android:name="com.unity3d.player.UnityPlayerActivity"
+            android:exported="false"/>
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -44,7 +52,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBWHI8KDTDEjiyAt39vEZFJVH0LOMe1iRQ" />
+            android:value="${MAPS_API_KEY}"/>
 
         <activity
             android:name=".MainActivity"

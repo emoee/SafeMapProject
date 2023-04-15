@@ -76,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 {
     private GoogleMap mMap;
     private FirebaseFirestore db;
+    FirebaseUser user;
     ClusterManager clusterManager;
     SearchView searchView;
     private ActivityMapsBinding binding;
@@ -96,6 +97,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //login ID save
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        email = user.getEmail();
 
         // Save user current location
         final LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -379,13 +384,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void setGPSData(LatLng node, boolean T){
         //firebase date setting
         db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Map<String, Object> data = new HashMap<>();
         if (T == true) {
             data.put("id", email);
             data.put("Hnode", node);
             if (user != null) {
-                email = user.getEmail();
                 db.collection("GPS").document(email).set(data);
                 Log.d(TAG, "setGPSData: " + data);
             }
@@ -487,8 +490,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         double lon = Double.parseDouble(dList[1].split("=")[1]);
                         Log.d(TAG, "onComplete: " + lat + lon);
                         LatLng childnode = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,13));
+                        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));
                     } else {
                         Log.d(TAG, "No such document");
                     }
