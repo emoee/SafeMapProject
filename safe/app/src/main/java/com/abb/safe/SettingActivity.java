@@ -14,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.abb.safe.Fragment.GuardianFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,7 +33,7 @@ public class SettingActivity extends AppCompatActivity {
     Button screenroute;
     Button screenmap;
     Button screensetting;
-    Button btn_setguardian;
+    Button btn_checkChild;
     String email;
     String member[];
     String name;
@@ -55,6 +54,18 @@ public class SettingActivity extends AppCompatActivity {
         gpsStatus = findViewById(R.id.gps_status);
         userData(); //update user account information
 
+        //아이 위치 확인
+        btn_checkChild = findViewById(R.id.btn_checkChild);
+        btn_checkChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                intent.putExtra("childCheck", "child");
+                startActivity(intent);
+            }
+        });
+
         //Change of GPS information consent
         gpsStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -66,24 +77,6 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //Registration of guardian information
-        btn_setguardian = findViewById(R.id.btn_setguardian);
-        btn_setguardian.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    GuardianFragment guardianFragment = new GuardianFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameGRegister,guardianFragment).commit();
-
-                } catch (Exception e) {
-                    System.out.println("frame error");
-                }
-
-            }
-        });
-
-
 
         // menu button
         screenmap = findViewById(R.id.screenmap);
