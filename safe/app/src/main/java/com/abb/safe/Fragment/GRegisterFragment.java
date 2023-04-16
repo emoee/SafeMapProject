@@ -91,6 +91,7 @@ public class GRegisterFragment extends Fragment {
                                         data.put("birth", editTextGBirth.getText().toString());
                                         data.put("cname",editText_cname.getText().toString());
                                         data.put("cemail", editText_cemail.getText().toString());
+                                        data.put("gpsShare", "false");
 
                                         db.collection("members").document(email)
                                                 .set(data)

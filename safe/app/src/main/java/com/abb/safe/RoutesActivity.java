@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.abb.safe.Fragment.sRoutesFragment;
+import com.unity3d.player.UnityPlayerActivity;
 
 public class RoutesActivity extends AppCompatActivity {
 
@@ -15,6 +16,7 @@ public class RoutesActivity extends AppCompatActivity {
     Button screenmap;
     Button screensetting;
     Button routesafe1;
+    Button UnityAR_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +52,13 @@ public class RoutesActivity extends AppCompatActivity {
 
         //지도 그리기
         routesafe1 = findViewById(R.id.route1_safe);
-        routesafe1.setOnClickListener(new View.OnClickListener() {
+        UnityAR_btn = findViewById(R.id.UnityAR_btn);
+        UnityAR_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    Bundle bundle = new Bundle(); // 번들을 통해 값 전달
-                    bundle.putString("route","routesafe1");//번들에 넘길 값 저장
-                    sRoutesFragment routesFragment = new sRoutesFragment();
-                    routesFragment.setArguments(bundle); //보내기
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame,routesFragment).commit();
-
+                    Intent intent = new Intent(RoutesActivity.this, UnityPlayerActivity.class);
+                    startActivity(intent);
                 } catch (Exception e) {
                     System.out.println("프레임 오류 생김");
                 }

@@ -49,11 +49,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.BlockingDeque;
 
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.maps.android.clustering.ClusterManager;
@@ -71,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 {
     private GoogleMap mMap;
     private FirebaseFirestore db;
+    FirebaseUser user;
     ClusterManager clusterManager;
     SearchView searchView;
     private ActivityMapsBinding binding;
@@ -83,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btn_alcol;
     Button btn_heatmap;
     String email;
+    String ctoGCheck;
 
 
     @Override
@@ -90,6 +97,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //login ID save
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        email = user.getEmail();
 
         // Save user current location
         final LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -216,6 +227,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 buildheatmap();
             }
         });
+
+        //아이 위치 확인하기
+        ctoGCheck = getIntent().getStringExtra("childCheck");
+        if (ctoGCheck == null){
+            ctoGCheck = "false";
+        }
+        else if (ctoGCheck.contains("child")){
+            Childcheck();
+            Log.d(TAG, "cCheck: " + ctoGCheck);
+        }
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -233,6 +254,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng SEOUL = new LatLng(37.500246, 127.024570); //서울 서초 초등학교
         //LatLng SEOUL = new LatLng(37.477769, 126.983978); //사당역
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL,13));
+
     }
 
     //marker POI
@@ -313,7 +335,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             is.close();
 
             json = new String(buffer, "UTF-8");
-            Log.d("--  json = ", json);
+            //Log.d("--  json = ", json);
             JSONObject jsonObject = new JSONObject(json);
 
             JSONArray Array = jsonObject.getJSONArray("data");
@@ -346,6 +368,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TileOverlay tileoverlay = mMap.addTileOverlay(tileoverlayoptions);
         tileoverlay.clearTileCache();
     }
+
     //Update GPS values in 30 seconds
     final LocationListener locationListener = new LocationListener() {
         @Override
@@ -356,22 +379,126 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setGPSData(node, true);
         }
     };
-    //save data to database
+
+    //save GPS data to database
     public void setGPSData(LatLng node, boolean T){
         //firebase date setting
         db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Map<String, Object> data = new HashMap<>();
         if (T == true) {
             data.put("id", email);
             data.put("Hnode", node);
             if (user != null) {
-                email = user.getEmail();
-                db.collection("GPS").document(email).update("id", email, "Hnode", node);
+                db.collection("GPS").document(email).set(data);
                 Log.d(TAG, "setGPSData: " + data);
             }
         } else {
             db.collection("GPS").document(email).update("destination", node);
         }
+    }
+
+    public void Childcheck(){
+        Log.d(TAG, "Childcheck: start" );
+        db = FirebaseFirestore.getInstance();
+        String[] box = null;
+        DocumentReference docRef = db.collection("members").document(email);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "Childcheck data: " + document.getData().getClass().getName());
+                        String []member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                        List<String> strList = new ArrayList<>();
+                        String cname = "";
+                        String cemail = "";
+                        for(int i =0; i< member.length; i++){
+                           if ((member[i].split("=")[0]).contains("cname")){
+                                cname  = member[i].split("=")[1];
+                                Log.d(TAG, "onComplete: " + member[i].split("=")[1]);
+                            }
+                            else if ((member[i].split("=")[0]).contains("cemail")){
+                                cemail = member[i].split("=")[1];
+                            }
+                        }
+                        if (cname != "" && cemail != ""){
+                            ChildGPScheck(cname, cemail);
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    //자녀 있는지 확인함
+    public void ChildGPScheck(String cname, String cemail){
+        Log.d(TAG, "ChildGPScheck: start");
+        db = FirebaseFirestore.getInstance();
+        String[] box = null;
+        DocumentReference docRef = db.collection("members").document(cemail);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "ChildGPScheck data: " + document.getData().getClass().getName());
+                        String []member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                        List<String> strList = new ArrayList<>();
+                        for(int i =0; i< member.length; i++){
+                            strList.add(member[i].split("=")[1]);
+                        }
+                        if (strList.contains(cname) && strList.contains(cemail)){
+                            if (strList.contains("true")){
+                                ChildGPSshow(cname, cemail); //자녀 위치 확인
+                            }
+                            else {
+                                Toast.makeText(MapsActivity.this, "위치 정보 제공에 동의하지 않았습니다.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        else {
+                            Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+    //GPS 위치 확인
+    public void ChildGPSshow(String cname, String cemail){
+        Log.d(TAG, "ChildGPSshow: start");
+        //LatLng cGPS = new LatLng(37.500246, 127.024570); //서초초 기본 세팅
+        DocumentReference docRef = db.collection("GPS").document(cemail);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String data = document.getData().toString().substring(1, document.getData().toString().length()-1);
+                        String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                        double lat = Double.parseDouble(dList[0].split("=")[1]);
+                        double lon = Double.parseDouble(dList[1].split("=")[1]);
+                        Log.d(TAG, "onComplete: " + lat + lon);
+                        LatLng childnode = new LatLng(lat, lon);
+                        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }
