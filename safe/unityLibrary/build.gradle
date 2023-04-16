@@ -12,7 +12,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion '30.0.2'
 
     compileOptions {
@@ -22,12 +22,12 @@ android {
 
     defaultConfig {
         minSdkVersion 27
-        targetSdkVersion 31
+        targetSdkVersion 33
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
         versionCode 1
-        versionName '1.0'
+        versionName '1.1'
         consumerProguardFiles 'proguard-unity.txt'
     }
 
@@ -97,4 +97,6 @@ android {
         }
     }
 }
+
+
 
