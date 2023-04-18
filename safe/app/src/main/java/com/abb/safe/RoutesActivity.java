@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.abb.safe.Fragment.dRoutesFragment;
 import com.abb.safe.Fragment.sRoutesFragment;
 import com.unity3d.player.UnityPlayerActivity;
 
@@ -15,7 +16,7 @@ public class RoutesActivity extends AppCompatActivity {
     Button screenroute;
     Button screenmap;
     Button screensetting;
-    Button routesafe1;
+    Button route1;
     Button UnityAR_btn;
 
     @Override
@@ -51,7 +52,27 @@ public class RoutesActivity extends AppCompatActivity {
         });
 
         //지도 그리기
-        routesafe1 = findViewById(R.id.route1_safe);
+        route1 = findViewById(R.id.route1);
+        route1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Bundle bundle = new Bundle(); // 번들을 통해 값 전달
+                    bundle.putString("route","route1");//번들에 넘길 값 저장
+                    sRoutesFragment sroutesFragment = new sRoutesFragment();
+                    sroutesFragment.setArguments(bundle); //보내기
+                    getSupportFragmentManager().beginTransaction().replace(R.id.framesafe, sroutesFragment).commit();
+
+                    dRoutesFragment droutesFragment = new dRoutesFragment();
+                    droutesFragment.setArguments(bundle); //보내기
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameshort, droutesFragment).commit();
+
+                } catch (Exception e) {
+                    System.out.println("프레임 오류 생김");
+                }
+
+            }
+        });
         UnityAR_btn = findViewById(R.id.UnityAR_btn);
         UnityAR_btn.setOnClickListener(new View.OnClickListener() {
             @Override

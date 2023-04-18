@@ -8,6 +8,7 @@
     tools:context=".RoutesActivity">
 
     <!-- TODO: Update blank fragment layout -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -15,104 +16,81 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/frame"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/frameshort"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginBottom="50dp"
                     app:srcCompat="@drawable/map" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:orientation="horizontal">
+            </FrameLayout>
+        </LinearLayout>
 
-                    <Button
-                        android:id="@+id/route1_short"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:text="경로 1 \n최단 거리" />
-
-                    <Button
-                        android:id="@+id/route1_safe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:text="경로 \n안전 길찾기" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/route2_short"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:text="경로 2 \n최단 거리" />
-
-                    <Button
-                        android:id="@+id/route2_safe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:text="경로 2 \n안전 길찾기" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/route3_short"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:text="경로 3 \n최단 거리" />
-
-                    <Button
-                        android:id="@+id/route3_safe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:text="경로 3 \n안전 길찾기" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </FrameLayout>
-
-        <Button
-            android:id="@+id/UnityAR_btn"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="AR 길찾기" />
+            android:layout_height="2px"
+            android:background="#C4000000" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:id="@+id/framesafe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/route1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="10dp"
+                        android:text="경로 1" />
+
+                    <Button
+                        android:id="@+id/route2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="경로 2" />
+
+                    <Button
+                        android:id="@+id/route3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="경로 3" />
+
+                    <Button
+                        android:id="@+id/UnityAR_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="AR 길찾기" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
