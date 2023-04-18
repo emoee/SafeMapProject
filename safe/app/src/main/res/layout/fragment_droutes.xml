@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.sRoutesFragment">
+    tools:context=".Fragment.dRoutesFragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <com.google.android.gms.maps.MapView
-        android:id="@+id/mapviewsafe"
+        android:id="@+id/mapviewshort"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

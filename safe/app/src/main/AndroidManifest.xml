@@ -34,7 +34,7 @@
             android:name=".SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".RoutesActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name="com.unity3d.player.UnityPlayerActivity"
@@ -55,7 +55,7 @@
             android:value="${MAPS_API_KEY}"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".RoutesActivity"
             android:exported="true"
             android:label="@string/title_activity_maps">
             <intent-filter>
