@@ -181,15 +181,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     {
                         @Override
                         public boolean onMarkerClick(Marker arg0) {
-                            /*
+                            Log.d(TAG, "onMarkerClick: check");
                             Map<String, Object> data = new HashMap<>();
                             data.put("startID", Currentnode);
                             data.put("endID", latLng);
                             String jsonString = data.toString();
-                            String url = "http://서버주소/api";
+                            String url = "http://10.40.9.49:5000";
+                            Log.d(TAG, "onMarkerClick: " + jsonString);
                             sendPostRequest(url, jsonString);
-                             */
-                            Log.d(TAG, "onMarkerClick: check");
                             return true;
                         }
                     });
@@ -530,6 +529,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //web server service request
     public void sendPostRequest(String url, String jsonString) {
+        Log.d(TAG, "sendPostRequest: start");
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(
                 MediaType.parse("application/json"),
@@ -543,12 +543,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onFailure(Call call, IOException e) {
                 // 요청 실패 시 실행되는 코드
+                Log.d(TAG, "onFailure: fail");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseString = response.body().string();
                 // 서버로부터 받은 응답에 대한 처리를 여기에 작성합니다.
+                Log.d(TAG, "onResponse: " + responseString);
             }
 
         });
