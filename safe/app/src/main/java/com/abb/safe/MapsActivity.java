@@ -33,6 +33,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.abb.safe.databinding.ActivityMapsBinding;
 
@@ -71,6 +72,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback //, NavigationView.OnNavigationItemSelectedListener
 {
@@ -90,6 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btn_heatmap;
     String email;
     String ctoGCheck;
+    LatLng Currentnode;
 
 
     @Override
@@ -113,8 +123,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 Log.d(TAG, "GPS onCreate: " + longitude + latitude);
-                LatLng node = new LatLng(latitude,longitude);
-                setGPSData(node, true); //Save to location database
+                Currentnode = new LatLng(latitude,longitude);
+                setGPSData(Currentnode, true); //Save to location database
             }
             LocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,300f, locationListener);
         }
@@ -167,6 +177,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.addMarker(new MarkerOptions().position(latLng).title(location));
                     setGPSData(latLng, false); //Save to location database (destination)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+                    {
+                        @Override
+                        public boolean onMarkerClick(Marker arg0) {
+                            Log.d(TAG, "onMarkerClick: check");
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("startID", Currentnode);
+                            data.put("endID", latLng);
+                            String jsonString = data.toString();
+                            String url = "http://10.40.9.49:5000";
+                            Log.d(TAG, "onMarkerClick: " + jsonString);
+                            sendPostRequest(url, jsonString);
+                            return true;
+                        }
+                    });
                 }
                 return false;
             }
@@ -499,6 +524,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
+        });
+    }
+
+    //web server service request
+    public void sendPostRequest(String url, String jsonString) {
+        Log.d(TAG, "sendPostRequest: start");
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(
+                MediaType.parse("application/json"),
+                jsonString
+        );
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // 요청 실패 시 실행되는 코드
+                Log.d(TAG, "onFailure: fail");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseString = response.body().string();
+                // 서버로부터 받은 응답에 대한 처리를 여기에 작성합니다.
+                Log.d(TAG, "onResponse: " + responseString);
+            }
+
         });
     }
 }
