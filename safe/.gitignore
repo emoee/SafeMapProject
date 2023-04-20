@@ -13,7 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/src/main/AndroidManifest.xml
 
 # User-specific configurations
 .idea/caches/
@@ -40,10 +39,3 @@ local.properties
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/navEditor.xml
-
-
-#100M 
-linkresult_4E6C356EE6363AE11CF59C1D018268DB/libil2cpp.sym.so
-linkresult_4E6C356EE6363AE11CF59C1D018268DB/libil2cpp.dbg.so
-linkresult_B8E94002345D5744ECFBFD669C1FC922/libil2cpp.sym.so
-linkresult_B8E94002345D5744ECFBFD669C1FC922/libil2cpp.dbg.so
