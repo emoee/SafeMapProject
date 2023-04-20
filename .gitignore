@@ -173,12 +173,3 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,macos
-
-
-#100M 
-linkresult_4E6C356EE6363AE11CF59C1D018268DB/libil2cpp.sym.so
-linkresult_4E6C356EE6363AE11CF59C1D018268DB/libil2cpp.dbg.so
-linkresult_B8E94002345D5744ECFBFD669C1FC922/libil2cpp.sym.so
-linkresult_B8E94002345D5744ECFBFD669C1FC922/libil2cpp.dbg.so
-c76707fc7e228042d85d6754fbee08474bdfff878b5320d9a5d6822b27d10732
-a797b64f5f3820a9c5437fa0f67a4ced4aa3b676faea000693daa9c4b4d27d96
