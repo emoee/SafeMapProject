@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        flatDir {
+            dirs "unityLibrary/libs" //"${project(':unityLibrary').projectDir}/libs" error
+        }
+    }
+}
+rootProject.name = "safe"
+include ':app', ':unityLibrary'
+
+//unity setting
+include ':unityLibrary'
+project(':unityLibrary').projectDir=new File('unityLibrary')
