@@ -10,8 +10,7 @@ plugins {
 
 android {
     namespace 'com.abb.safe'
-    compileSdk 33
-    //33
+    compileSdk 33 //33
 
     defaultConfig {
         applicationId "com.abb.safe"
@@ -40,7 +39,7 @@ android {
 
 dependencies {
     //네비게이션 바 /add dependency
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
 
