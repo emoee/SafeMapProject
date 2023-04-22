@@ -3,14 +3,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-.vscode
-
-#100MB
-sysmbols/
-**/sysmbols/
-unityLibrary/
-libil2cpp.so
-tt.text
+.vscode/
 
 # Created by https://www.toptal.com/developers/gitignore/api/androidstudio,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=androidstudio,macos
@@ -20,6 +13,13 @@ tt.text
 .DS_Store
 .AppleDouble
 .LSOverride
+
+#100MB
+sysmbols/
+**/sysmbols/
+unityLibrary/
+libil2cpp.so
+tt.text
 
 # Icon must end with two \r
 Icon

@@ -41,7 +41,7 @@ local.properties
 .idea/navEditor.xml
 
 #100MB
-unityLibrary/
+sysmbols/
 **/sysmbols/
 unityLibrary/
 libil2cpp.so
