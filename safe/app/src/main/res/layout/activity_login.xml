@@ -8,14 +8,16 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
+
     <TextView
         android:id="@+id/textView_loginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="@font/rose"
         android:text="로그인"
-        android:textColor="@android:color/black"
-        android:textSize="25sp" />
+        android:textColor="#3C605E"
+        android:textSize="50sp" />
 
     <View
         android:id="@+id/view_line2"
@@ -24,46 +26,98 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
-        android:background="@android:color/black" />
+        android:background="#7C4E7065" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
     <EditText
         android:id="@+id/edittext_email"
-        android:layout_width="wrap_content"
-        android:layout_height="46dp"
+        android:layout_width="216dp"
+        android:layout_height="52dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="E-mail"
+        android:fontFamily="@font/rose"
+        android:hint="이메일"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/edittext_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="216dp"
+        android:layout_height="48dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Password"
+        android:fontFamily="@font/rose"
+        android:hint="비밀번호"
         android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="#ffffff"
-        android:text="로그인" />
 
-    <Button
-        android:id="@+id/btn_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#ffffff"
-        android:text="회원가입" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="44dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="426dp"
+        android:layout_height="71dp">
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="13dp"
+            android:background="@drawable/buttonshape2"
+            android:baselineAligned="false"
+            android:fontFamily="@font/rose"
+            android:text="로그인"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_signup"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="102dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/buttonshape2"
+            android:fontFamily="@font/rose"
+            android:text="회원가입"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_login" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="42dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="456dp"
+        android:layout_height="151dp">
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="432dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/childroad" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

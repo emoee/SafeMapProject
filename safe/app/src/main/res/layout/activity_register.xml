@@ -13,14 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="보호자 계정 가입" />
+        android:fontFamily="@font/rose"
+        android:text="보호자 계정 가입"
+        android:textSize="24sp" />
 
     <FrameLayout
         android:id="@+id/frameGRegister"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -29,87 +32,139 @@
                 android:id="@+id/setting_Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/rose"
                 android:text="회원가입"
-                android:textColor="@android:color/black"
-                android:textSize="25sp" />
-
-            <View
-                android:id="@+id/view_line"
-                android:layout_width="250dp"
-                android:layout_height="1.2dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:background="@android:color/black" />
+                android:textColor="#FF9800"
+                android:textSize="34sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/editText_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="210dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="28dp"
                 android:ems="10"
-                android:hint="E-mail"
+                android:fontFamily="@font/rose"
+                android:hint="이메일"
                 android:inputType="textEmailAddress"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/setting_Title" />
 
             <EditText
                 android:id="@+id/editText_passWord"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="210dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="Password"
+                android:fontFamily="@font/rose"
+                android:hint="비밀번호"
                 android:inputType="textPassword"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="@+id/editText_email"
+                app:layout_constraintStart_toStartOf="@+id/editText_email"
+                app:layout_constraintTop_toBottomOf="@+id/editText_email" />
 
             <EditText
                 android:id="@+id/editText_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="210dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="Name"
+                android:fontFamily="@font/rose"
+                android:hint="이름"
                 android:inputType="textPersonName"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="@+id/editText_passWord"
+                app:layout_constraintStart_toStartOf="@+id/editText_passWord"
+                app:layout_constraintTop_toBottomOf="@+id/editText_passWord" />
 
             <EditText
                 android:id="@+id/editText_birth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="211dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="birth"
+                android:fontFamily="@font/rose"
+                android:hint="생년월일"
                 android:inputType="textPersonName"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="@+id/editText_name"
+                app:layout_constraintStart_toStartOf="@+id/editText_name"
+                app:layout_constraintTop_toBottomOf="@+id/editText_name" />
 
             <CheckBox
                 android:id="@+id/checkbox_gps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_width="235dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="20dp"
                 android:ems="10"
-                android:text="위치정보 제공 동의" />
+                android:fontFamily="@font/rose"
+                android:text="위치정보 제공 동의"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_join"
+                app:layout_constraintEnd_toEndOf="@+id/editText_birth"
+                app:layout_constraintStart_toStartOf="@+id/editText_birth"
+                app:layout_constraintTop_toBottomOf="@+id/editText_birth"
+                app:layout_constraintVertical_bias="0.066" />
 
             <Button
                 android:id="@+id/btn_join"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:background="@android:color/white"
-                android:text="Join"
-                android:textColor="@android:color/black" />
+                android:layout_width="118dp"
+                android:layout_height="47dp"
+                android:background="@drawable/buttonshape"
+                android:fontFamily="@font/rose"
+                android:text="가입완료!"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/textView"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                tools:layout_editor_absoluteY="475dp" />
 
             <Button
                 android:id="@+id/btn_join_login"
+                android:layout_width="131dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/buttonshape"
+                android:fontFamily="@font/rose"
+                android:text="로그인하러 가기 "
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/btn_join"
+                app:layout_constraintHorizontal_bias="0.481"
+                app:layout_constraintStart_toStartOf="@+id/btn_join"
+                app:layout_constraintTop_toBottomOf="@+id/btn_join" />
+
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@android:color/white"
-                android:text="Login"
-                android:textColor="@android:color/black" />
-        </LinearLayout>
+                android:layout_marginTop="13dp"
+                android:fontFamily="@font/rose"
+                android:text="보호자에게 아동의 위치 정보를 알려줍니다."
+                android:textColor="#032F9C"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_gps"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_gps"
+                app:layout_constraintTop_toBottomOf="@+id/checkbox_gps" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="163dp"
+                android:layout_height="114dp"
+                app:srcCompat="@drawable/norang"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="492dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 
