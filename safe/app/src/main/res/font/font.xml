@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <font android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/rose"/>
+
+</font-family>
+
+
+
+
+
+ <!-- fontStyle [글꼴 스타일]
+      normal, bold 등을 적용할 수 있다.
+
+      fontWeight [글꼴의 두께]
+      속성값은 반드시 양수이며, 100~900 사이의 100의 배수여야 한다.
+      기본값은 400, 굵은체의 두께 700
+
+      android:fontFamily="@font/폰트명" 을 추가하여 글씨체를 수정할 수 있다.
+    -->
