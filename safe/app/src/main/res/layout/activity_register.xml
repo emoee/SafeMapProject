@@ -125,7 +125,8 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"
-                tools:layout_editor_absoluteY="475dp" />
+                tools:layout_editor_absoluteY="475dp"
+                tools:ignore="MissingConstraints" />
 
             <Button
                 android:id="@+id/btn_join_login"
@@ -156,12 +157,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/checkbox_gps" />
 
             <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="163dp"
-                android:layout_height="114dp"
-                app:srcCompat="@drawable/norang"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="492dp" />
+                android:id="@+id/imageView3"
+                android:layout_width="72dp"
+                android:layout_height="67dp"
+                android:layout_marginEnd="45dp"
+                android:layout_marginBottom="150dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/bbi" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
