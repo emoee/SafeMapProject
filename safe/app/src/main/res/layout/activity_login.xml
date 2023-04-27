@@ -17,7 +17,7 @@
         android:fontFamily="@font/rose"
         android:text="로그인"
         android:textColor="#3C605E"
-        android:textSize="50sp" />
+        android:textSize="63sp" />
 
     <View
         android:id="@+id/view_line2"
@@ -34,20 +34,22 @@
 
     <EditText
         android:id="@+id/edittext_email"
-        android:layout_width="216dp"
-        android:layout_height="52dp"
+        android:layout_width="240dp"
+        android:layout_height="63dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:fontFamily="@font/rose"
         android:hint="이메일"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textColor="#C36A6A6A"
+        android:textSize="35sp" />
 
     <EditText
         android:id="@+id/edittext_password"
-        android:layout_width="216dp"
-        android:layout_height="48dp"
+        android:layout_width="242dp"
+        android:layout_height="66dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -55,7 +57,9 @@
         android:ems="10"
         android:fontFamily="@font/rose"
         android:hint="비밀번호"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="#C36A6A6A"
+        android:textSize="35sp" />
 
 
     <Space
@@ -65,35 +69,35 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frameLayout"
         android:layout_width="426dp"
-        android:layout_height="71dp">
+        android:layout_height="85dp">
 
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="69dp"
             android:layout_marginStart="100dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="13dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/buttonshape2"
             android:baselineAligned="false"
             android:fontFamily="@font/rose"
             android:text="로그인"
-            android:textSize="20sp"
+            android:textSize="45sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_signup"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btn_signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="129dp"
+            android:layout_height="69dp"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="102dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/buttonshape2"
             android:fontFamily="@font/rose"
             android:text="회원가입"
-            android:textSize="20sp"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_login" />
@@ -110,12 +114,13 @@
 
         <ImageView
             android:id="@+id/imageView6"
-            android:layout_width="432dp"
-            android:layout_height="160dp"
+            android:layout_width="429dp"
+            android:layout_height="185dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/childroad" />
     </androidx.constraintlayout.widget.ConstraintLayout>

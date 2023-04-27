@@ -15,7 +15,7 @@
         android:layout_margin="10dp"
         android:fontFamily="@font/rose"
         android:text="보호자 계정 가입"
-        android:textSize="24sp" />
+        android:textSize="35sp" />
 
     <FrameLayout
         android:id="@+id/frameGRegister"
@@ -32,11 +32,11 @@
                 android:id="@+id/setting_Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="4dp"
                 android:fontFamily="@font/rose"
                 android:text="회원가입"
-                android:textColor="#FF9800"
-                android:textSize="34sp"
+                android:textColor="#619159"
+                android:textSize="55sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,14 +46,15 @@
                 android:id="@+id/editText_email"
                 android:layout_width="210dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:ems="10"
                 android:fontFamily="@font/rose"
                 android:hint="이메일"
                 android:inputType="textEmailAddress"
-                android:textColor="@android:color/black"
+                android:textColor="#C36A6A6A"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/setting_Title" />
 
@@ -66,7 +67,8 @@
                 android:fontFamily="@font/rose"
                 android:hint="비밀번호"
                 android:inputType="textPassword"
-                android:textColor="@android:color/black"
+                android:textColor="#C36A6A6A"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="@+id/editText_email"
                 app:layout_constraintStart_toStartOf="@+id/editText_email"
                 app:layout_constraintTop_toBottomOf="@+id/editText_email" />
@@ -80,7 +82,8 @@
                 android:fontFamily="@font/rose"
                 android:hint="이름"
                 android:inputType="textPersonName"
-                android:textColor="@android:color/black"
+                android:textColor="#C36A6A6A"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="@+id/editText_passWord"
                 app:layout_constraintStart_toStartOf="@+id/editText_passWord"
                 app:layout_constraintTop_toBottomOf="@+id/editText_passWord" />
@@ -94,50 +97,52 @@
                 android:fontFamily="@font/rose"
                 android:hint="생년월일"
                 android:inputType="textPersonName"
-                android:textColor="@android:color/black"
+                android:textColor="#C36A6A6A"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="@+id/editText_name"
                 app:layout_constraintStart_toStartOf="@+id/editText_name"
                 app:layout_constraintTop_toBottomOf="@+id/editText_name" />
 
             <CheckBox
                 android:id="@+id/checkbox_gps"
-                android:layout_width="235dp"
-                android:layout_height="49dp"
+                android:layout_width="300dp"
+                android:layout_height="55dp"
                 android:layout_marginTop="20dp"
                 android:ems="10"
                 android:fontFamily="@font/rose"
-                android:text="위치정보 제공 동의"
-                android:textSize="20sp"
+                android:text=" 위치정보 제공 동의"
+                android:textSize="40sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_join"
                 app:layout_constraintEnd_toEndOf="@+id/editText_birth"
+                app:layout_constraintHorizontal_bias="0.51"
                 app:layout_constraintStart_toStartOf="@+id/editText_birth"
                 app:layout_constraintTop_toBottomOf="@+id/editText_birth"
-                app:layout_constraintVertical_bias="0.066" />
+                app:layout_constraintVertical_bias="0.037" />
 
             <Button
                 android:id="@+id/btn_join"
-                android:layout_width="118dp"
-                android:layout_height="47dp"
+                android:layout_width="125dp"
+                android:layout_height="54dp"
                 android:background="@drawable/buttonshape"
                 android:fontFamily="@font/rose"
                 android:text="가입완료!"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
+                android:textSize="35sp"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"
-                tools:layout_editor_absoluteY="475dp"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="481dp" />
 
             <Button
                 android:id="@+id/btn_join_login"
-                android:layout_width="131dp"
-                android:layout_height="46dp"
-                android:layout_marginTop="24dp"
+                android:layout_width="182dp"
+                android:layout_height="61dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/buttonshape"
                 android:fontFamily="@font/rose"
-                android:text="로그인하러 가기 "
+                android:text=" 로그인하러 가기 "
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="@+id/btn_join"
                 app:layout_constraintHorizontal_bias="0.481"
                 app:layout_constraintStart_toStartOf="@+id/btn_join"
@@ -150,21 +155,31 @@
                 android:layout_marginTop="13dp"
                 android:fontFamily="@font/rose"
                 android:text="보호자에게 아동의 위치 정보를 알려줍니다."
-                android:textColor="#032F9C"
-                android:textSize="20sp"
+                android:textColor="#936140"
+                android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="@+id/checkbox_gps"
                 app:layout_constraintStart_toStartOf="@+id/checkbox_gps"
                 app:layout_constraintTop_toBottomOf="@+id/checkbox_gps" />
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="72dp"
-                android:layout_height="67dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginBottom="150dp"
+                android:layout_width="67dp"
+                android:layout_height="71dp"
+                android:layout_marginEnd="308dp"
+                android:layout_marginBottom="68dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/bbi" />
+                app:srcCompat="@drawable/bbo" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="90dp"
+                android:layout_height="105dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="56dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/mom" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

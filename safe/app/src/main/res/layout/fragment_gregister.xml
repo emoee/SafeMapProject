@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,7 +8,8 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
@@ -18,117 +20,153 @@
             android:id="@+id/setting_Title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginStart="155dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="154dp"
+            android:fontFamily="@font/rose"
             android:text="회원가입"
-            android:textColor="@android:color/black"
-            android:textSize="25sp" />
-
-        <View
-            android:id="@+id/view_line3"
-            android:layout_width="250dp"
-            android:layout_height="1.2dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@android:color/black" />
+            android:textColor="#3D77A5"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.513"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editText_gemail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="207dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="28dp"
             android:ems="10"
-            android:hint="E-mail"
+            android:fontFamily="@font/rose"
+            android:hint="이메일"
             android:inputType="textEmailAddress"
-            android:textColor="@android:color/black" />
+            android:textColor="#C36A6A6A"
+            android:textSize="35sp"
+            app:layout_constraintEnd_toEndOf="@+id/setting_Title2"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="@+id/setting_Title2"
+            app:layout_constraintTop_toBottomOf="@+id/setting_Title2" />
 
         <EditText
             android:id="@+id/editText_gpassWord"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="207dp"
+            android:layout_height="59dp"
             android:ems="10"
-            android:hint="Password"
+            android:fontFamily="@font/rose"
+            android:hint="비밀번호"
             android:inputType="textPassword"
-            android:textColor="@android:color/black" />
+            android:textColor="#C36A6A6A"
+            android:textSize="35sp"
+            app:layout_constraintEnd_toEndOf="@+id/editText_gemail"
+            app:layout_constraintStart_toStartOf="@+id/editText_gemail"
+            app:layout_constraintTop_toBottomOf="@+id/editText_gemail" />
 
         <EditText
             android:id="@+id/editText_gname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="208dp"
+            android:layout_height="53dp"
             android:ems="10"
-            android:hint="Name"
+            android:fontFamily="@font/rose"
+            android:hint="이름"
             android:inputType="textPersonName"
-            android:textColor="@android:color/black" />
+            android:textColor="#C36A6A6A"
+            android:textSize="35sp"
+            app:layout_constraintEnd_toEndOf="@+id/editText_gpassWord"
+            app:layout_constraintStart_toStartOf="@+id/editText_gpassWord"
+            app:layout_constraintTop_toBottomOf="@+id/editText_gpassWord" />
 
         <EditText
             android:id="@+id/editText_gbirth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="207dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="2dp"
             android:ems="10"
-            android:hint="birth"
+            android:fontFamily="@font/rose"
+            android:hint="생년월일"
             android:inputType="textPersonName"
-            android:textColor="@android:color/black" />
-
-        <View
-            android:id="@+id/view_line4"
-            android:layout_width="250dp"
-            android:layout_height="1.2dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@android:color/black" />
+            android:textColor="#C36A6A6A"
+            android:textSize="35sp"
+            app:layout_constraintEnd_toEndOf="@+id/editText_gname"
+            app:layout_constraintStart_toStartOf="@+id/editText_gname"
+            app:layout_constraintTop_toBottomOf="@+id/editText_gname" />
 
         <TextView
             android:id="@+id/setting_Title3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/rose"
             android:text="어린이 정보"
-            android:textColor="@android:color/black"
-            android:textSize="25sp" />
+            android:textColor="#3D77A5"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_gbirth" />
 
         <EditText
             android:id="@+id/editText_cemail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="214dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="23dp"
             android:ems="10"
-            android:hint="E-mail"
+            android:fontFamily="@font/rose"
+            android:hint="이메일"
             android:inputType="textEmailAddress"
-            android:textColor="@android:color/black" />
+            android:textColor="#C36A6A6A"
+            android:textSize="35sp"
+            app:layout_constraintEnd_toEndOf="@+id/setting_Title3"
+            app:layout_constraintHorizontal_bias="0.467"
+            app:layout_constraintStart_toStartOf="@+id/setting_Title3"
+            app:layout_constraintTop_toBottomOf="@+id/setting_Title3" />
 
         <EditText
             android:id="@+id/editText_cname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="213dp"
+            android:layout_height="55dp"
             android:ems="10"
-            android:hint="name"
+            android:fontFamily="@font/rose"
+            android:hint="이름"
             android:inputType="textPersonName"
-            android:textColor="@android:color/black" />
+            android:textColor="#C36A6A6A"
+            android:textSize="35sp"
+            app:layout_constraintEnd_toEndOf="@+id/editText_cemail"
+            app:layout_constraintStart_toStartOf="@+id/editText_cemail"
+            app:layout_constraintTop_toBottomOf="@+id/editText_cemail" />
 
         <Button
             android:id="@+id/btn_gjoin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="@android:color/white"
-            android:text="Join"
-            android:textColor="@android:color/black" />
+            android:layout_width="118dp"
+            android:layout_height="73dp"
+            android:layout_marginStart="76dp"
+            android:background="@drawable/buttonshape5"
+            android:fontFamily="@font/rose"
+            android:text="가입완료"
+            android:textColor="@android:color/black"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_cname"
+            app:layout_constraintVertical_bias="0.492" />
 
         <Button
             android:id="@+id/buttonExit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@android:color/white"
+            android:layout_width="107dp"
+            android:layout_height="71dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="96dp"
+            android:background="@drawable/buttonshape5"
+            android:fontFamily="@font/rose"
             android:text="닫기"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.444"
+            app:layout_constraintStart_toEndOf="@+id/btn_gjoin"
+            app:layout_constraintTop_toBottomOf="@+id/editText_cname"
+            app:layout_constraintVertical_bias="0.507" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
