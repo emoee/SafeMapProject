@@ -7,85 +7,96 @@
     android:orientation="vertical"
     tools:context=".RoutesActivity">
 
-    <!-- TODO: Update blank fragment layout -->
+<!-- TODO: Update blank fragment layout -->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout5"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="15"
         android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/route1"
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginTop="148dp"
-            android:background="@drawable/buttonshape3"
-            android:fontFamily="@font/rose"
-            android:text="경로 1"
-            android:textSize="55sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/route2"
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="148dp"
-            android:layout_marginEnd="44dp"
-            android:background="@drawable/buttonshape3"
-            android:fontFamily="@font/rose"
-            android:text="경로 2"
-            android:textSize="55sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <FrameLayout
+                android:id="@+id/frameshort"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/route3"
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginBottom="240dp"
-            android:background="@drawable/buttonshape3"
-            android:fontFamily="@font/rose"
-            android:text="경로 3"
-            android:textSize="55sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"/>
 
-        <Button
-            android:id="@+id/UnityAR_btn"
-            android:layout_width="158dp"
-            android:layout_height="121dp"
-            android:layout_marginEnd="44dp"
-            android:background="@drawable/buttonshape3"
-            android:fontFamily="@font/rose"
-            android:text="AR 길찾기"
-            android:textSize="45sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/route2"
-            app:layout_constraintVertical_bias="0.047" />
+            </FrameLayout>
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="279dp"
-            android:layout_height="205dp"
-            android:layout_marginTop="416dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ttokki" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#C4000000" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:id="@+id/framesafe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/route1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="10dp"
+                        android:text="경로 1" />
+
+                    <Button
+                        android:id="@+id/route2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="경로 2" />
+
+                    <Button
+                        android:id="@+id/route3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="경로 3" />
+
+                    <Button
+                        android:id="@+id/UnityAR_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="AR 길찾기" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_weight="1"
+        android:layout_height="108dp"
+        android:layout_alignParentBottom="true"
         android:background="#FFDDE8">
 
         <ImageButton
@@ -122,8 +133,5 @@
             app:srcCompat="@drawable/setting1"
             android:contentDescription="TODO" />
 
-
     </LinearLayout>
-
-
 </LinearLayout>

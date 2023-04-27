@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.abb.safe.Fragment.dRoutesFragment;
 import com.abb.safe.Fragment.sRoutesFragment;
@@ -13,9 +14,9 @@ import com.unity3d.player.UnityPlayerActivity;
 
 public class RoutesActivity extends AppCompatActivity {
 
-    Button screenroute;
-    Button screenmap;
-    Button screensetting;
+    ImageButton screenroute;
+    ImageButton screenmap;
+    ImageButton screensetting;
     Button route1;
     Button route2;
     Button route3;
