@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -30,9 +31,9 @@ public class SettingActivity extends AppCompatActivity {
     private TextView userName;
     private TextView userBirth;
     Switch gpsStatus;
-    Button screenroute;
-    Button screenmap;
-    Button screensetting;
+    ImageButton screenroute;
+    ImageButton screenmap;
+    ImageButton screensetting;
     Button btn_checkChild;
     String email;
     String member[];

@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 //import android.widget.SearchView;
 import androidx.appcompat.widget.SearchView;
@@ -89,9 +90,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ClusterManager clusterManager;
     SearchView searchView;
     private ActivityMapsBinding binding;
-    Button screenroute;
-    Button screenmap;
-    Button screensetting;
+    ImageButton screenroute;
+    ImageButton screenmap;
+    ImageButton screensetting;
     Button btn_police;
     Button btn_home;
     Button btn_bell;
@@ -253,7 +254,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        //아이 위치 확인하기
+        //child location check
         ctoGCheck = getIntent().getStringExtra("childCheck");
         if (ctoGCheck == null){
             ctoGCheck = "false";
