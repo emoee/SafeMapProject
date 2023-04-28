@@ -102,10 +102,8 @@ public class sRoutesFragment extends Fragment implements OnMapReadyCallback {
                         new LatLng(37.5024312818848, 127.024552815756),
                         new LatLng(37.502419958268, 127.024170282665),
                         new LatLng(37.5027239972006, 127.02352064695),
-                        new LatLng(37.5021705546584, 127.02172658308),
-                        new LatLng(37.4984730735083,127.023481560113),
-                        new LatLng(37.4989684587637, 127.025153826925),
-                        new LatLng(37.4997960668424, 127.024750873972))
+                        new LatLng(37.50217055465836, 127.02172658307967),
+                        new LatLng(37.499160820451905, 127.02315208953428))
                 .color(Color.rgb(0,128,0))
                 .width(20)
                 .clickable(true));
@@ -146,14 +144,9 @@ public class sRoutesFragment extends Fragment implements OnMapReadyCallback {
                 .clickable(true)
                 .add(new LatLng(37.504632241851525, 127.02475674896527),
                         new LatLng(37.505531304131964, 127.02777722941545),
-                        new LatLng(37.50608550285561, 127.02753299976115),
-                        new LatLng(37.50643510181747, 127.02869197802863),
-                        new LatLng(37.507149394055745, 127.02836881947098),
-                        new LatLng(37.50802210744868, 127.0286199399597),
-                        new LatLng(37.50837068496362, 127.02803709864656),
-                        new LatLng(37.508422696637396, 127.02790960990149),
-                        new LatLng(37.50841286748833, 127.02706957434486),
-                        new LatLng(37.50790990509755, 127.02707238363251))
+                        new LatLng(37.50688479485652, 127.02715479661151),
+                        new LatLng(37.50705908221907, 127.02711342432036),
+                        new LatLng(37.508582084656, 127.02705229318053))
                 .color(Color.rgb(0,128,0))
                 .width(20)
                 .clickable(true));

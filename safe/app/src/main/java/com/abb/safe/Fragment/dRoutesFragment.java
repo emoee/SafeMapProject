@@ -142,10 +142,11 @@ public class dRoutesFragment extends Fragment implements OnMapReadyCallback {
         Polyline shpolyline = googleMap.addPolyline((new PolylineOptions())
                 .clickable(true)
                 .add(new LatLng(37.504632241851525, 127.02475674896527),
-                        new LatLng(37.5055153202136, 127.027768300926),
-                        new LatLng(37.5069028803928, 127.027150073017),
-                        new LatLng(37.5070519815924, 127.027113823959),
-                        new LatLng(37.50790990509755, 127.02707238363251))
+                        new LatLng(37.50595768158011, 127.0239034125449),
+                        new LatLng(37.50651351280427, 127.0245005779597),
+                        new LatLng(37.50712197397771, 127.0260822882161),
+                        new LatLng(37.50757277993441, 127.0258457469676),
+                        new LatLng(37.50766502609567, 127.0261436867957))
                 .color(Color.rgb(0, 0, 128))
                 .width(27)
                 .clickable(true));
