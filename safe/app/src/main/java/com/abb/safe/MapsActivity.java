@@ -53,6 +53,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.BlockingDeque;
 
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,6 +82,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.Route;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback //, NavigationView.OnNavigationItemSelectedListener
@@ -98,7 +101,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btn_bell;
     Button btn_alcol;
     Button btn_heatmap;
+    Button btn_near;
     String email;
+    String NDataValue[];
     String ctoGCheck;
     LatLng Currentnode;
 
@@ -183,13 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public boolean onMarkerClick(Marker arg0) {
                             Log.d(TAG, "onMarkerClick: check");
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("startID", Currentnode);
-                            data.put("endID", latLng);
-                            String jsonString = data.toString();
-                            String url = "http://10.40.9.49:5000";
-                            Log.d(TAG, "onMarkerClick: " + jsonString);
-                            sendPostRequest(url, jsonString);
+                            RouteDestination();
                             return true;
                         }
                     });
@@ -210,6 +209,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btn_home = (Button)findViewById(R.id.btn_home);
         btn_bell = (Button)findViewById(R.id.btn_bell);
         btn_alcol = (Button)findViewById(R.id.btn_alcol);
+        btn_near = (Button)findViewById(R.id.btn_near);
         btn_police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -243,6 +243,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 setMarkerCluster("alcol");
             }
         });
+
+        //nearby safe
+        btn_near.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //mMap.clear();
+
+                DocumentReference docRef = db.collection("Safe").document(email);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
+                                NDataValue = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                                double Nlat = 0;
+                                double Nlon = 0;
+                                for (int i = 0; i< NDataValue.length; i++){
+                                    if (i%2 == 0){
+                                        Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
+                                    }
+                                    else {
+                                        Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
+                                        mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
+                                    }
+                                }
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+            }
+        });
+
         //heatmap setting
         btn_heatmap = (Button) findViewById(R.id.btn_heatmap);
         btn_heatmap.setOnClickListener(new View.OnClickListener() {
@@ -312,6 +351,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //Search destination route
+    public void RouteDestination(){
+        mMap.clear();
+        DocumentReference docRef = db.collection("PATH2").document(email);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
+                        String Route [] = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                        double Rlat[] = new double[Route.length/2+1];
+                        double Rlon[] = new double[Route.length/2+1];
+                        for (int i = 0; i< Route.length-1; i++){ //total 제외
+                            try {
+                                Log.d(TAG, "Route: " + Route[i]);
+                                if (i%2 == 0){
+                                    Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
+                                }
+                                else {
+                                    Rlon[i/2] = Double.parseDouble(Route[i].split("longitude=")[1].substring(0, Route[i].split("longitude=")[1].length()-2));
+                                    Log.d(TAG, "onComplete lon: " + Rlon[i]);
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                        TmakePolyLine(Rlat, Rlon);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void TmakePolyLine(double[] Tlat, double[] Tlon){
+        Log.d(TAG, "TmakePolyLine: start" );
+        List<LatLng> RoutePoly = new ArrayList<>();
+        for (int i = 0; i< Tlat.length-1; i++){
+            RoutePoly.add(new LatLng(Tlat[i], Tlon[i]));
+        }
+        Log.d(TAG, "makePolyLine: " + RoutePoly);
+
+        Polyline shpolyline = mMap.addPolyline((new PolylineOptions())
+                .clickable(true)
+                .addAll(RoutePoly)
+                .color(Color.rgb(128, 0, 0 ))
+                .width(27)
+                .clickable(true));
+
     }
 
     //cluster marker color change
@@ -461,7 +556,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    //자녀 있는지 확인함
+    //Check if it's a child
     public void ChildGPScheck(String cname, String cemail){
         Log.d(TAG, "ChildGPScheck: start");
         db = FirebaseFirestore.getInstance();
@@ -481,7 +576,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                         if (strList.contains(cname) && strList.contains(cemail)){
                             if (strList.contains("true")){
-                                ChildGPSshow(cname, cemail); //자녀 위치 확인
+                                ChildGPSshow(cname, cemail); //location check
                             }
                             else {
                                 Toast.makeText(MapsActivity.this, "위치 정보 제공에 동의하지 않았습니다.", Toast.LENGTH_LONG).show();
@@ -499,7 +594,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-    //GPS 위치 확인
+    //GPS location check
     public void ChildGPSshow(String cname, String cemail){
         Log.d(TAG, "ChildGPSshow: start");
         //LatLng cGPS = new LatLng(37.500246, 127.024570); //서초초 기본 세팅
@@ -525,35 +620,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
-        });
-    }
-
-    //web server service request
-    public void sendPostRequest(String url, String jsonString) {
-        Log.d(TAG, "sendPostRequest: start");
-        OkHttpClient client = new OkHttpClient();
-        RequestBody requestBody = RequestBody.create(
-                MediaType.parse("application/json"),
-                jsonString
-        );
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // 요청 실패 시 실행되는 코드
-                Log.d(TAG, "onFailure: fail");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseString = response.body().string();
-                // 서버로부터 받은 응답에 대한 처리를 여기에 작성합니다.
-                Log.d(TAG, "onResponse: " + responseString);
-            }
-
         });
     }
 }
