@@ -4,8 +4,14 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +20,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +32,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -35,11 +46,13 @@ public class SettingActivity extends AppCompatActivity {
     ImageButton screenmap;
     ImageButton screensetting;
     Button btn_checkChild;
+    Button btn_accuse;
     String email;
     String member[];
     String name;
     String birth;
     boolean GpsShare;
+    LatLng Accusenode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +68,9 @@ public class SettingActivity extends AppCompatActivity {
         gpsStatus = findViewById(R.id.gps_status);
         userData(); //update user account information
 
-        //아이 위치 확인
+        //child location check and accuse button
         btn_checkChild = findViewById(R.id.btn_checkChild);
+        btn_accuse = findViewById(R.id.btn_accuse);
         btn_checkChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +78,24 @@ public class SettingActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                 intent.putExtra("childCheck", "child");
                 startActivity(intent);
+            }
+        });
+        btn_accuse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                    ActivityCompat.requestPermissions(SettingActivity.this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION}, 0 );}
+                else {
+                    Location location = LocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        double longitude = location.getLongitude();
+                        double latitude = location.getLatitude();
+                        Log.d(TAG, "GPS settingAc: " + longitude + latitude);
+                        Accusenode = new LatLng(latitude, longitude);
+                        AccuseGPSData(Accusenode);
+                    }
+                }
             }
         });
 
@@ -162,4 +194,16 @@ public class SettingActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    //save GPS data to database for accuse
+    public void AccuseGPSData(LatLng node){
+        //firebase date setting
+        db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("Hnode", node);
+        db.collection("Report").document(email).set(data);
+        Toast.makeText(SettingActivity.this, "신고가 접수되었습니다.", Toast.LENGTH_LONG).show();
+
+    }
+
 }

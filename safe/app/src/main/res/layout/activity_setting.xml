@@ -7,7 +7,7 @@
     tools:context=".SettingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="759dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -130,6 +130,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.675"
             app:layout_constraintStart_toEndOf="@+id/textView2"
+            tools:layout_conversion_absoluteHeight="48dp"
+            tools:layout_conversion_absoluteWidth="88dp" />
+
+        <Button
+            android:id="@+id/btn_accuse"
+            android:layout_width="78dp"
+            android:layout_height="59dp"
+            android:layout_marginBottom="132dp"
+            android:background="@drawable/buttonshape4"
+            android:fontFamily="@font/rose"
+            android:text="신고"
+            android:textColor="#000000"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/btn_checkChild"
+            app:layout_constraintTop_toBottomOf="@+id/btn_checkChild"
+            app:layout_constraintVertical_bias="0.6"
             tools:layout_conversion_absoluteHeight="48dp"
             tools:layout_conversion_absoluteWidth="88dp" />
 

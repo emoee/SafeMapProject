@@ -128,7 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (location != null) {
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
-                Log.d(TAG, "GPS onCreate: " + longitude + latitude);
+                Log.d(TAG, "GPS MapsAc: " + longitude + latitude);
                 Currentnode = new LatLng(latitude,longitude);
                 setGPSData(Currentnode, true); //Save to location database
             }
