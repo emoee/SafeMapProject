@@ -22,6 +22,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.abb.safe.MyFunction.DBAccess;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -48,11 +49,11 @@ public class SettingActivity extends AppCompatActivity {
     Button btn_checkChild;
     Button btn_accuse;
     String email;
-    String member[];
     String name;
     String birth;
     boolean GpsShare;
     LatLng Accusenode;
+    String[] member;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,6 @@ public class SettingActivity extends AppCompatActivity {
         userBirth = findViewById(R.id.user_birth);
         gpsStatus = findViewById(R.id.gps_status);
         userData(); //update user account information
-
         //child location check and accuse button
         btn_checkChild = findViewById(R.id.btn_checkChild);
         btn_accuse = findViewById(R.id.btn_accuse);
@@ -139,38 +139,32 @@ public class SettingActivity extends AppCompatActivity {
 
     }
     //Get user information from database
-    public void userData(){
+    public synchronized void userData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             email = user.getEmail();
-            DocumentReference docRef = db.collection("members").document(email);
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
-                                    member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
-                                    userShow();
-                                } else {
-                                    Log.d(TAG, "No such document");
-                                }
-                            } else {
-                                Log.d(TAG, "get failed with ", task.getException());
-                            }
-                        }
-                    });
-        }
+                DBAccess myDB = new DBAccess();
+                member = myDB.DBList("members", email);
+                if (member == null) {
+                    Log.d(TAG, "usercheck: " + member);
+                } else {
+                    for (int i = 0; i < member.length; i++) {
+                        if (member[i].split("=")[0].equals("name")) name = member[i].split("=")[1];
+                        else if (member[i].split("=")[0].equals("birth"))
+                            birth = member[i].split("=")[1];
+                        else if (member[i].split("=")[0].equals("gpsShare"))
+                            GpsShare = Boolean.valueOf(member[i].split("=")[1]);
+                        else continue;
+                    }
+                    Log.d(TAG, "userData: " + name);
+                    userShow();
+                }
+            } else{
+                Log.d(TAG, "No such document");
+            }
     }
     //Display user information
     public void userShow(){
-        for (int i = 0; i < member.length; i++){
-            if (member[i].split("=")[0].equals("name")) name = member[i].split("=")[1];
-            else if (member[i].split("=")[0].equals("birth")) birth = member[i].split("=")[1];
-            else if (member[i].split("=")[0].equals("gpsShare")) GpsShare = Boolean.valueOf(member[i].split("=")[1]);
-            else continue;
-        }
         userName.setText(name);
         userBirth.setText(birth);
         if (GpsShare == true) gpsStatus.setChecked(true);
@@ -203,7 +197,6 @@ public class SettingActivity extends AppCompatActivity {
         data.put("Hnode", node);
         db.collection("Report").document(email).set(data);
         Toast.makeText(SettingActivity.this, "신고가 접수되었습니다.", Toast.LENGTH_LONG).show();
-
     }
 
 }
