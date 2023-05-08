@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
@@ -552,27 +556,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void ChildGPSshow(String cname, String cemail){
         Log.d(TAG, "ChildGPSshow : start");
         DocumentReference docRef = db.collection("GPS").document(cemail);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Timer timer = new Timer();
+        TimerTask TT = new TimerTask() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String data = document.getData().toString().substring(1, document.getData().toString().length()-1);
-                        String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
-                        double lat = Double.parseDouble(dList[0].split("=")[1]);
-                        double lon = Double.parseDouble(dList[1].split("=")[1]);
-                        Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
-                        LatLng childnode = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));
+            public void run() {
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            String data = document.getData().toString().substring(1, document.getData().toString().length() - 1);
+                            String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                            double lat = Double.parseDouble(dList[0].split("=")[1]);
+                            double lon = Double.parseDouble(dList[1].split("=")[1]);
+                            Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
+                            LatLng childnode = new LatLng(lat, lon);
+                            mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 16));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
+            });
+        }
+        };
+        timer.schedule(TT, 0, 1000); //Timer
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable()  {
+            public void run() {
+                timer.cancel();
             }
-        });
+        }, 10000); //Shutdown after 10 seconds
+
     }
 }
