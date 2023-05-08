@@ -13,7 +13,6 @@ import com.abb.safe.Fragment.sRoutesFragment;
 import com.unity3d.player.UnityPlayerActivity;
 
 public class RoutesActivity extends AppCompatActivity {
-
     ImageButton screenroute;
     ImageButton screenmap;
     ImageButton screensetting;

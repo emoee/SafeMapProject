@@ -1,7 +1,4 @@
 package com.abb.safe;
-
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,11 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-//import android.widget.SearchView;
 import androidx.appcompat.widget.SearchView;
 
 import com.abb.safe.MyFunction.CustomClusterRenderer;
-import com.abb.safe.MyFunction.DBAccess;
 import com.abb.safe.MyFunction.MyCluster;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,8 +46,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.heatmaps.Gradient;
@@ -66,6 +65,7 @@ import org.json.JSONObject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback //, NavigationView.OnNavigationItemSelectedListener
 {
+    public static final String TAG = MapsActivity.class.getSimpleName() + "<abb>";
     private GoogleMap mMap;
     private FirebaseFirestore db;
     FirebaseUser user;
@@ -236,25 +236,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 mMap.clear();
-                DBAccess myDB = new DBAccess();
-                NDataValue = myDB.DBList("Safe", email);
-                Log.d(TAG, "onClick: " + NDataValue);
-                if (NDataValue == null){
-                    Log.d(TAG, "onClick: " + NDataValue);
-                    return;
-                }
-                double Nlat = 0;
-                double Nlon = 0;
-                for (int i = 0; i< NDataValue.length; i++){
-                    if (i%2 == 0){
-                        Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
+                DocumentReference docRef = db.collection("Safe").document(email);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d(TAG, "btn_near data: " + document.getData().getClass().getName());
+                                NDataValue = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
+                                double Nlat = 0;
+                                double Nlon = 0;
+                                for (int i = 0; i < NDataValue.length; i++) {
+                                    if (i % 2 == 0) {
+                                        Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
+                                    } else {
+                                        Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
+                                        mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
+                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
+                                    }
+                                }
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
                     }
-                    else {
-                        Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
-                    }
-                }
+                });
             }
         });
 
@@ -330,28 +339,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //Search destination route
     public void RouteDestination(){
         mMap.clear();
-        DBAccess myDB = new DBAccess();
-        String[] Route = myDB.DBList("PATH2", email);
-        Log.d(TAG, "RouteDestination: " + Route);
-        if (Route == null){
-            Log.d(TAG, "RouteDestination: " + Route);
-            return;
-        }
-        double Rlat[] = new double[Route.length/2+1];
-        double Rlon[] = new double[Route.length/2+1];
-        for (int i = 0; i< Route.length-1; i++){ //total 제외
-            try {
-                if (i%2 == 0){
-                    Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
+        try {
+            DocumentReference docRef = db.collection("PATH2").document(email);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "RouteDestination data: " + document.getData().getClass().getName());
+                            String Route [] = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                            double Rlat[] = new double[Route.length/2+1];
+                            double Rlon[] = new double[Route.length/2+1];
+                            for (int i = 0; i< Route.length-1; i++){ //total 제외
+                                try {
+                                    if (i%2 == 0){
+                                        Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
+                                    }
+                                    else {
+                                        Rlon[i/2] = Double.parseDouble(Route[i].split("longitude=")[1].substring(0, Route[i].split("longitude=")[1].length()-2));
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            }
+                            TmakePolyLine(Rlat, Rlon);
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
                 }
-                else {
-                    Rlon[i/2] = Double.parseDouble(Route[i].split("longitude=")[1].substring(0, Route[i].split("longitude=")[1].length()-2));
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            });
+        }catch (Exception e){
+            Log.d(TAG, "RouteDestination: document error");
+            e.printStackTrace();
         }
-        TmakePolyLine(Rlat, Rlon);
     }
 
     public void TmakePolyLine(double[] Tlat, double[] Tlon){
@@ -360,7 +384,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (int i = 0; i< Tlat.length-1; i++){
             RoutePoly.add(new LatLng(Tlat[i], Tlon[i]));
         }
-        Log.d(TAG, "makePolyLine: " + RoutePoly);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Tlat[0], Tlon[0]),15));
         Polyline spolyline = mMap.addPolyline((new PolylineOptions())
                 .clickable(true)
@@ -388,7 +411,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             is.close();
 
             json = new String(buffer, "UTF-8");
-            //Log.d("--  json = ", json);
             JSONObject jsonObject = new JSONObject(json);
 
             JSONArray Array = jsonObject.getJSONArray("data");
@@ -451,72 +473,106 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void Childcheck(){
-        Log.d(TAG, "Childcheck: start" );
-        DBAccess myDB = new DBAccess();
-        String[] myData = myDB.DBList("members", email);
-        String cname = "";
-        String cemail = "";
-        Log.d(TAG, "Childcheck: " + myData);
-        if (myData == null){
-            Log.d(TAG, "Childcheck: " + myData);
-            return;
-        }
-        for(int i =0; i< myData.length; i++){
-            if ((myData[i].split("=")[0]).contains("cname")){
-                cname  = myData[i].split("=")[1];
-                Log.d(TAG, "onComplete: " + myData[i].split("=")[1]);
+        Log.d(TAG, "Childcheck : start" );
+        db = FirebaseFirestore.getInstance();
+        String[] box = null;
+        DocumentReference docRef = db.collection("members").document(email);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "Childcheck data: " + document.getData().getClass().getName());
+                        String []member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                        List<String> strList = new ArrayList<>();
+                        String cname = "";
+                        String cemail = "";
+                        for(int i =0; i< member.length; i++){
+                            if ((member[i].split("=")[0]).contains("cname")){
+                                cname  = member[i].split("=")[1];
+                                Log.d(TAG, "Childcheck onComplete: " + member[i].split("=")[1]);
+                            }
+                            else if ((member[i].split("=")[0]).contains("cemail")){
+                                cemail = member[i].split("=")[1];
+                            }
+                        }
+                        if (cname != "" && cemail != ""){
+                            ChildGPScheck(cname, cemail);
+                        } else {
+                            Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
-            else if ((myData[i].split("=")[0]).contains("cemail")){
-                cemail = myData[i].split("=")[1];
-            }
-        }
-        if (cname != "" && cemail != ""){
-            ChildGPScheck(cname, cemail);
-        } else {
-            Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
-        }
+        });
     }
 
     //Check if it's a child
     public void ChildGPScheck(String cname, String cemail){
-        Log.d(TAG, "ChildGPScheck: start");
-        DBAccess myDB = new DBAccess();
-        String[] myData = myDB.DBList("members", cemail);
-        Log.d(TAG, "ChildGPScheck: " + myData);
-        if (myData == null){
-            Log.d(TAG, "ChildGPScheck: " + myData);
-            Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        List<String> strList = new ArrayList<>();
-        for(int i =0; i< myData.length; i++){
-            strList.add(myData[i].split("=")[1]);
-        }
-        if (strList.contains(cname) && strList.contains(cemail)){
-            if (strList.contains("true")){
-                ChildGPSshow(cname, cemail); //location check
+        Log.d(TAG, "ChildGPScheck : start");
+        db = FirebaseFirestore.getInstance();
+        String[] box = null;
+        DocumentReference docRef = db.collection("members").document(cemail);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "ChildGPScheck data: " + document.getData().getClass().getName());
+                        String []member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                        List<String> strList = new ArrayList<>();
+                        for(int i =0; i< member.length; i++){
+                            strList.add(member[i].split("=")[1]);
+                        }
+                        if (strList.contains(cname) && strList.contains(cemail)){
+                            if (strList.contains("true")){
+                                ChildGPSshow(cname, cemail); //location check
+                            }
+                            else {
+                                Toast.makeText(MapsActivity.this, "위치 정보 제공에 동의하지 않았습니다.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
-            else {
-                Toast.makeText(MapsActivity.this, "위치 정보 제공에 동의하지 않았습니다.", Toast.LENGTH_LONG).show();
-            }
-        }
+        });
     }
     //GPS location check
     public void ChildGPSshow(String cname, String cemail){
-        Log.d(TAG, "ChildGPSshow: start");
-        DBAccess myDB = new DBAccess();
-        String myData = myDB.DB("GPS", cemail);
-        Log.d(TAG, "ChildGPSshow: " + myData);
-        if (myData == null){
-            Log.d(TAG, "ChildGPSshow: " + myData);
-            return;
-        }
-        String[] dList = myData.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
-        double lat = Double.parseDouble(dList[0].split("=")[1]);
-        double lon = Double.parseDouble(dList[1].split("=")[1]);
-        Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
-        LatLng childnode = new LatLng(lat, lon);
-        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));
+        Log.d(TAG, "ChildGPSshow : start");
+        DocumentReference docRef = db.collection("GPS").document(cemail);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String data = document.getData().toString().substring(1, document.getData().toString().length()-1);
+                        String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                        double lat = Double.parseDouble(dList[0].split("=")[1]);
+                        double lon = Double.parseDouble(dList[1].split("=")[1]);
+                        Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
+                        LatLng childnode = new LatLng(lat, lon);
+                        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

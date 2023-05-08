@@ -1,7 +1,6 @@
 package com.abb.safe.MyFunction;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -16,7 +15,6 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<MyCluster> {
     //cluster marker color change
     @Override
     protected void onBeforeClusterItemRendered(MyCluster item, MarkerOptions markerOptions) {
-        Log.d("cluster", "onBeforeClusterItemRendered: " + item.getTitle());
         if(item.getTitle() == "police") {
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(0f));
         } else if (item.getTitle() == "bells") {

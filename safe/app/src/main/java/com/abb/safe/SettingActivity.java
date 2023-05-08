@@ -1,7 +1,4 @@
 package com.abb.safe;
-
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -22,7 +19,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abb.safe.MyFunction.DBAccess;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
+    public static final String TAG = SettingActivity.class.getSimpleName() + "<abb>";
 
     private FirebaseFirestore db;
     private TextView userName;
@@ -139,35 +136,45 @@ public class SettingActivity extends AppCompatActivity {
 
     }
     //Get user information from database
-    public synchronized void userData(){
+    public void userData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             email = user.getEmail();
-                DBAccess myDB = new DBAccess();
-                member = myDB.DBList("members", email);
-                if (member == null) {
-                    Log.d(TAG, "usercheck: " + member);
-                } else {
-                    for (int i = 0; i < member.length; i++) {
-                        if (member[i].split("=")[0].equals("name")) name = member[i].split("=")[1];
-                        else if (member[i].split("=")[0].equals("birth"))
-                            birth = member[i].split("=")[1];
-                        else if (member[i].split("=")[0].equals("gpsShare"))
-                            GpsShare = Boolean.valueOf(member[i].split("=")[1]);
-                        else continue;
+            DocumentReference docRef = db.collection("members").document(email);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "userData data: " + document.getData().getClass().getName());
+                            member = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
+                            for (int i = 0; i < member.length; i++) {
+                                if (member[i].split("=")[0].equals("name"))
+                                    name = member[i].split("=")[1];
+                                else if (member[i].split("=")[0].equals("birth"))
+                                    birth = member[i].split("=")[1];
+                                else if (member[i].split("=")[0].equals("gpsShare"))
+                                    GpsShare = Boolean.valueOf(member[i].split("=")[1]);
+                                else continue;
+                            }
+                            Log.d(TAG, "userData: " + name);
+                            userShow(name, birth, GpsShare);
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                    Log.d(TAG, "userData: " + name);
-                    userShow();
                 }
-            } else{
-                Log.d(TAG, "No such document");
-            }
+            });
+        }
     }
     //Display user information
-    public void userShow(){
-        userName.setText(name);
-        userBirth.setText(birth);
-        if (GpsShare == true) gpsStatus.setChecked(true);
+    public void userShow(String nname, String bbirth, boolean ggps){
+        userName.setText(nname);
+        userBirth.setText(bbirth);
+        if (ggps == true) gpsStatus.setChecked(true);
         else gpsStatus.setChecked(false);
     }
 

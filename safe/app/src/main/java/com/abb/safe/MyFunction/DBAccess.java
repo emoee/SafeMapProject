@@ -1,10 +1,6 @@
 package com.abb.safe.MyFunction;
 
 import static android.content.ContentValues.TAG;
-
-import static java.lang.Thread.sleep;
-
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;

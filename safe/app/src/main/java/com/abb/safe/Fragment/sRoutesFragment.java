@@ -1,8 +1,4 @@
 package com.abb.safe.Fragment;
-
-import static android.content.ContentValues.TAG;
-import static java.lang.Thread.sleep;
-
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -13,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.abb.safe.MapsActivity;
 import com.abb.safe.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,11 +17,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.Dash;
-import com.google.android.gms.maps.model.Dot;
-import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
@@ -37,6 +30,7 @@ import okhttp3.Route;
 
 
 public class sRoutesFragment extends Fragment implements OnMapReadyCallback {
+    public static final String TAG = sRoutesFragment.class.getSimpleName() + "<abb>";
     View RootView;
     MapView mapView;
     String title;
