@@ -89,6 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String ctoGCheck;
     LatLng Currentnode;
     String[] NDataValue;
+    Marker marker;
+    int counter;
 
     //heatmap setting
     int[] colors = {
@@ -555,9 +557,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //GPS location check
     public void ChildGPSshow(String cname, String cemail){
         Log.d(TAG, "ChildGPSshow : start");
+        counter = 1;
         DocumentReference docRef = db.collection("GPS").document(cemail);
         Timer timer = new Timer();
-        TimerTask TT = new TimerTask() {
+        TimerTask T1 = new TimerTask() {
             @Override
             public void run() {
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -566,14 +569,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            String data = document.getData().toString().substring(1, document.getData().toString().length() - 1);
+                            String data = document.getData().toString().substring(1, document.getData().toString().length() - 2);
                             String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
                             double lat = Double.parseDouble(dList[0].split("=")[1]);
                             double lon = Double.parseDouble(dList[1].split("=")[1]);
                             Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
                             LatLng childnode = new LatLng(lat, lon);
-                            mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 16));
+                            if (counter == 1){
+                                marker = mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
+                                counter += 1;
+                            } else {
+                                marker.setPosition(childnode);
+                            }
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 20));
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -582,15 +590,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             });
-        }
+            }
         };
-        timer.schedule(TT, 0, 1000); //Timer
+        timer.schedule(T1, 0, 1500); //Timer1
         Handler mHandler = new Handler();
         mHandler.postDelayed(new Runnable()  {
             public void run() {
                 timer.cancel();
             }
-        }, 10000); //Shutdown after 10 seconds
+        }, 100000); //Shutdown after 10 seconds
 
     }
 }
