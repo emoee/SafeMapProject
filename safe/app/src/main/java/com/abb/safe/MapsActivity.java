@@ -1,9 +1,5 @@
 package com.abb.safe;
-
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RawRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -11,7 +7,6 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,9 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
-//import android.widget.SearchView;
 import androidx.appcompat.widget.SearchView;
 
+import com.abb.safe.MyFunction.CustomClusterRenderer;
 import com.abb.safe.MyFunction.MyCluster;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,10 +34,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.abb.safe.databinding.ActivityMapsBinding;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,11 +41,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.BlockingDeque;
-
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -64,9 +53,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.google.maps.android.heatmaps.WeightedLatLng;
@@ -75,18 +62,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.Route;
-
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback //, NavigationView.OnNavigationItemSelectedListener
 {
+    public static final String TAG = MapsActivity.class.getSimpleName() + "<abb>";
     private GoogleMap mMap;
     private FirebaseFirestore db;
     FirebaseUser user;
@@ -103,10 +82,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button btn_heatmap;
     Button btn_near;
     String email;
-    String NDataValue[];
     String ctoGCheck;
     LatLng Currentnode;
+    String[] NDataValue;
 
+    //heatmap setting
+    int[] colors = {
+            Color.rgb(102, 225, 0), // green
+            Color.rgb(255, 0, 0)    // red
+    };
+    float[] startpoints = {
+            0.2f, 1f
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude = location.getLatitude();
                 Log.d(TAG, "GPS MapsAc: " + longitude + latitude);
                 Currentnode = new LatLng(latitude,longitude);
-                setGPSData(Currentnode, true); //Save to location database
+                //setGPSData(Currentnode, true); //Save to location database
             }
             LocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,300f, locationListener);
         }
@@ -248,8 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btn_near.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mMap.clear();
-
+                mMap.clear();
                 DocumentReference docRef = db.collection("Safe").document(email);
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -257,15 +243,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
-                                NDataValue = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                                Log.d(TAG, "btn_near data: " + document.getData().getClass().getName());
+                                NDataValue = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
                                 double Nlat = 0;
                                 double Nlon = 0;
-                                for (int i = 0; i< NDataValue.length; i++){
-                                    if (i%2 == 0){
+                                for (int i = 0; i < NDataValue.length; i++) {
+                                    if (i % 2 == 0) {
                                         Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
-                                    }
-                                    else {
+                                    } else {
                                         Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
                                         mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
@@ -306,7 +291,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         //cluster setting
         clusterManager = new ClusterManager<>(this, mMap);
         clusterManager.setRenderer(new CustomClusterRenderer(MapsActivity.this, mMap, clusterManager));
@@ -314,7 +298,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(clusterManager);
         mMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
         mMap.setOnInfoWindowClickListener(clusterManager);
-
 
         LatLng SEOUL = new LatLng(37.500246, 127.024570); //서울 서초 초등학교
         //LatLng SEOUL = new LatLng(37.477769, 126.983978); //사당역
@@ -356,40 +339,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //Search destination route
     public void RouteDestination(){
         mMap.clear();
-        DocumentReference docRef = db.collection("PATH2").document(email);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
-                        String Route [] = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
-                        double Rlat[] = new double[Route.length/2+1];
-                        double Rlon[] = new double[Route.length/2+1];
-                        for (int i = 0; i< Route.length-1; i++){ //total 제외
-                            try {
-                                Log.d(TAG, "Route: " + Route[i]);
-                                if (i%2 == 0){
-                                    Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
+        try {
+            DocumentReference docRef = db.collection("PATH2").document(email);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "RouteDestination data: " + document.getData().getClass().getName());
+                            String Route [] = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
+                            double Rlat[] = new double[Route.length/2+1];
+                            double Rlon[] = new double[Route.length/2+1];
+                            for (int i = 0; i< Route.length-1; i++){ //total 제외
+                                try {
+                                    if (i%2 == 0){
+                                        Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
+                                    }
+                                    else {
+                                        Rlon[i/2] = Double.parseDouble(Route[i].split("longitude=")[1].substring(0, Route[i].split("longitude=")[1].length()-2));
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
                                 }
-                                else {
-                                    Rlon[i/2] = Double.parseDouble(Route[i].split("longitude=")[1].substring(0, Route[i].split("longitude=")[1].length()-2));
-                                    Log.d(TAG, "onComplete lon: " + Rlon[i]);
-                                }
-                            }catch (Exception e){
-                                e.printStackTrace();
                             }
+                            TmakePolyLine(Rlat, Rlon);
+                        } else {
+                            Log.d(TAG, "No such document");
                         }
-                        TmakePolyLine(Rlat, Rlon);
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            Log.d(TAG, "RouteDestination: document error");
+            e.printStackTrace();
+        }
     }
 
     public void TmakePolyLine(double[] Tlat, double[] Tlon){
@@ -398,48 +384,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (int i = 0; i< Tlat.length-1; i++){
             RoutePoly.add(new LatLng(Tlat[i], Tlon[i]));
         }
-        Log.d(TAG, "makePolyLine: " + RoutePoly);
-
-        Polyline shpolyline = mMap.addPolyline((new PolylineOptions())
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Tlat[0], Tlon[0]),15));
+        Polyline spolyline = mMap.addPolyline((new PolylineOptions())
                 .clickable(true)
                 .addAll(RoutePoly)
                 .color(Color.rgb(128, 0, 0 ))
                 .width(27)
                 .clickable(true));
-
+        spolyline.setStartCap(new RoundCap());
+        spolyline.setEndCap(new RoundCap());
+        spolyline.setTag("SafeRoute");
     }
-
-    //cluster marker color change
-    public class CustomClusterRenderer extends DefaultClusterRenderer<MyCluster> {
-
-        public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<MyCluster> clusterManager) {
-            super(context, map, clusterManager);
-        }
-        @Override
-        protected void onBeforeClusterItemRendered(MyCluster item, MarkerOptions markerOptions) {
-            Log.d("cluster", "onBeforeClusterItemRendered: " + item.getTitle());
-            if(item.getTitle() == "police") {
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(0f));
-            } else if (item.getTitle() == "bells") {
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(120f));
-            } else if (item.getTitle() == "safehouse") {
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(330f));
-            } else if (item.getTitle() == "alcol") {
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(60f));
-            }
-            markerOptions.snippet(item.getSnippet());
-            super.onBeforeClusterItemRendered(item, markerOptions);
-        }
-    }
-
-    //heatmap setting
-    int[] colors = {
-            Color.rgb(102, 225, 0), // green
-            Color.rgb(255, 0, 0)    // red
-    };
-    float[] startpoints = {
-            0.2f, 1f
-    };
 
     //json file
     private ArrayList addheatmap() {
@@ -456,7 +411,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             is.close();
 
             json = new String(buffer, "UTF-8");
-            //Log.d("--  json = ", json);
             JSONObject jsonObject = new JSONObject(json);
 
             JSONArray Array = jsonObject.getJSONArray("data");
@@ -479,7 +433,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //heatmap show
     private void buildheatmap(){
-        Gradient gradient = new Gradient(colors,startpoints);
+        Gradient gradient = new Gradient(colors, startpoints);
         HeatmapTileProvider heatmapTileProvider = new HeatmapTileProvider.Builder()
                 .weightedData(addheatmap())
                 .radius(20)
@@ -497,7 +451,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
             LatLng node = new LatLng(latitude,longitude);
-            setGPSData(node, true);
+            setGPSData(node, true); //Save to location database
         }
     };
 
@@ -519,7 +473,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void Childcheck(){
-        Log.d(TAG, "Childcheck: start" );
+        Log.d(TAG, "Childcheck : start" );
         db = FirebaseFirestore.getInstance();
         String[] box = null;
         DocumentReference docRef = db.collection("members").document(email);
@@ -535,9 +489,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         String cname = "";
                         String cemail = "";
                         for(int i =0; i< member.length; i++){
-                           if ((member[i].split("=")[0]).contains("cname")){
+                            if ((member[i].split("=")[0]).contains("cname")){
                                 cname  = member[i].split("=")[1];
-                                Log.d(TAG, "onComplete: " + member[i].split("=")[1]);
+                                Log.d(TAG, "Childcheck onComplete: " + member[i].split("=")[1]);
                             }
                             else if ((member[i].split("=")[0]).contains("cemail")){
                                 cemail = member[i].split("=")[1];
@@ -545,8 +499,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                         if (cname != "" && cemail != ""){
                             ChildGPScheck(cname, cemail);
+                        } else {
+                            Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
                         Log.d(TAG, "No such document");
                     }
                 } else {
@@ -558,7 +515,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Check if it's a child
     public void ChildGPScheck(String cname, String cemail){
-        Log.d(TAG, "ChildGPScheck: start");
+        Log.d(TAG, "ChildGPScheck : start");
         db = FirebaseFirestore.getInstance();
         String[] box = null;
         DocumentReference docRef = db.collection("members").document(cemail);
@@ -582,9 +539,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 Toast.makeText(MapsActivity.this, "위치 정보 제공에 동의하지 않았습니다.", Toast.LENGTH_LONG).show();
                             }
                         }
-                        else {
-                            Toast.makeText(MapsActivity.this, "등록된 자녀가 없습니다.", Toast.LENGTH_LONG).show();
-                        }
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -596,8 +550,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     //GPS location check
     public void ChildGPSshow(String cname, String cemail){
-        Log.d(TAG, "ChildGPSshow: start");
-        //LatLng cGPS = new LatLng(37.500246, 127.024570); //서초초 기본 세팅
+        Log.d(TAG, "ChildGPSshow : start");
         DocumentReference docRef = db.collection("GPS").document(cemail);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -609,7 +562,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
                         double lat = Double.parseDouble(dList[0].split("=")[1]);
                         double lon = Double.parseDouble(dList[1].split("=")[1]);
-                        Log.d(TAG, "onComplete: " + lat + lon);
+                        Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
                         LatLng childnode = new LatLng(lat, lon);
                         mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));

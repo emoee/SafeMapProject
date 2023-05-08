@@ -1,7 +1,4 @@
 package com.abb.safe;
-
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
+    public static final String TAG = RegisterActivity.class.getSimpleName() + "<abb>";
 
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore db;

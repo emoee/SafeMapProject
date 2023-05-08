@@ -1,7 +1,4 @@
 package com.abb.safe;
-
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -37,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SettingActivity extends AppCompatActivity {
+    public static final String TAG = SettingActivity.class.getSimpleName() + "<abb>";
 
     private FirebaseFirestore db;
     private TextView userName;
@@ -48,11 +46,11 @@ public class SettingActivity extends AppCompatActivity {
     Button btn_checkChild;
     Button btn_accuse;
     String email;
-    String member[];
     String name;
     String birth;
     boolean GpsShare;
     LatLng Accusenode;
+    String[] member;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +65,6 @@ public class SettingActivity extends AppCompatActivity {
         userBirth = findViewById(R.id.user_birth);
         gpsStatus = findViewById(R.id.gps_status);
         userData(); //update user account information
-
         //child location check and accuse button
         btn_checkChild = findViewById(R.id.btn_checkChild);
         btn_accuse = findViewById(R.id.btn_accuse);
@@ -144,36 +141,40 @@ public class SettingActivity extends AppCompatActivity {
         if (user != null) {
             email = user.getEmail();
             DocumentReference docRef = db.collection("members").document(email);
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData().getClass().getName());
-                                    member = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
-                                    userShow();
-                                } else {
-                                    Log.d(TAG, "No such document");
-                                }
-                            } else {
-                                Log.d(TAG, "get failed with ", task.getException());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "userData data: " + document.getData().getClass().getName());
+                            member = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
+                            for (int i = 0; i < member.length; i++) {
+                                if (member[i].split("=")[0].equals("name"))
+                                    name = member[i].split("=")[1];
+                                else if (member[i].split("=")[0].equals("birth"))
+                                    birth = member[i].split("=")[1];
+                                else if (member[i].split("=")[0].equals("gpsShare"))
+                                    GpsShare = Boolean.valueOf(member[i].split("=")[1]);
+                                else continue;
                             }
+                            Log.d(TAG, "userData: " + name);
+                            userShow(name, birth, GpsShare);
+                        } else {
+                            Log.d(TAG, "No such document");
                         }
-                    });
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
         }
     }
     //Display user information
-    public void userShow(){
-        for (int i = 0; i < member.length; i++){
-            if (member[i].split("=")[0].equals("name")) name = member[i].split("=")[1];
-            else if (member[i].split("=")[0].equals("birth")) birth = member[i].split("=")[1];
-            else if (member[i].split("=")[0].equals("gpsShare")) GpsShare = Boolean.valueOf(member[i].split("=")[1]);
-            else continue;
-        }
-        userName.setText(name);
-        userBirth.setText(birth);
-        if (GpsShare == true) gpsStatus.setChecked(true);
+    public void userShow(String nname, String bbirth, boolean ggps){
+        userName.setText(nname);
+        userBirth.setText(bbirth);
+        if (ggps == true) gpsStatus.setChecked(true);
         else gpsStatus.setChecked(false);
     }
 
@@ -203,7 +204,6 @@ public class SettingActivity extends AppCompatActivity {
         data.put("Hnode", node);
         db.collection("Report").document(email).set(data);
         Toast.makeText(SettingActivity.this, "신고가 접수되었습니다.", Toast.LENGTH_LONG).show();
-
     }
 
 }

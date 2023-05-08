@@ -1,9 +1,5 @@
 package com.abb.safe.Fragment;
-
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,24 +14,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.abb.safe.LoginActivity;
+import com.abb.safe.MapsActivity;
 import com.abb.safe.R;
-import com.abb.safe.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 
 public class GRegisterFragment extends Fragment {
+    public static final String TAG = GRegisterFragment.class.getSimpleName() + "<abb>";
     View RootView;
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
