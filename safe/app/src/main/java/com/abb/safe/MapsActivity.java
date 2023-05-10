@@ -581,7 +581,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             } else {
                                 marker.setPosition(childnode);
                             }
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 20));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 18));
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -598,7 +598,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void run() {
                 timer.cancel();
             }
-        }, 100000); //Shutdown after 10 seconds
-
+        }, 1800000); //Shutdown after 1800 seconds
     }
 }
