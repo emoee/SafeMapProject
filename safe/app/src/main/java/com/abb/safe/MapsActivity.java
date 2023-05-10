@@ -242,34 +242,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 mMap.clear();
-                DocumentReference docRef = db.collection("Safe").document(email);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d(TAG, "btn_near data: " + document.getData().getClass().getName());
-                                NDataValue = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
-                                double Nlat = 0;
-                                double Nlon = 0;
-                                for (int i = 0; i < NDataValue.length; i++) {
-                                    if (i % 2 == 0) {
-                                        Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
-                                    } else {
-                                        Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
-                                        mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
+                try {
+                    DocumentReference docRef = db.collection("Safe").document(email);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "btn_near data: " + document.getData().getClass().getName());
+                                    NDataValue = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
+                                    double Nlat = 0;
+                                    double Nlon = 0;
+                                    for (int i = 0; i < NDataValue.length; i++) {
+                                        if (i % 2 == 0) {
+                                            Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
+                                        } else {
+                                            Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
+                                            mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
+                                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
+                                        }
                                     }
+                                } else {
+                                    Log.d(TAG, "No such document");
                                 }
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(MapsActivity.this, "근처에 안전시설이 없습니다.", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
         });
 
