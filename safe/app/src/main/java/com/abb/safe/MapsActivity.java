@@ -576,7 +576,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
                             LatLng childnode = new LatLng(lat, lon);
                             if (counter == 1){
-                                marker = mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
+                                marker = mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.checkchild)));
                                 counter += 1;
                             } else {
                                 marker.setPosition(childnode);
