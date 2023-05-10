@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.SearchView;
 
 import com.abb.safe.MyFunction.CustomClusterRenderer;
+import com.abb.safe.MyFunction.GPSsetting;
 import com.abb.safe.MyFunction.MyCluster;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,6 +39,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,7 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         //login ID save
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
@@ -125,7 +126,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude = location.getLatitude();
                 Log.d(TAG, "GPS MapsAc: " + longitude + latitude);
                 Currentnode = new LatLng(latitude,longitude);
-                setGPSData(Currentnode, true); //Save to location database
+                GPSsetting myDB = new GPSsetting();
+                myDB.setGPSData(Currentnode, true); //Save to location database
             }
             LocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,300f, locationListener);
         }
@@ -176,7 +178,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Address address = addressList.get(0); // Save GPS Values with Geocoding
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    setGPSData(latLng, false); //Save to location database (destination)
+                    GPSsetting myDB = new GPSsetting();
+                    myDB.setGPSData(latLng, false); //Save to location database (destination)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
                     {
@@ -464,34 +467,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
             LatLng node = new LatLng(latitude,longitude);
-            setGPSData(node, true); //Save to location database
+            GPSsetting myDB = new GPSsetting();
+            myDB.setGPSData(node, true); //Save to location database
         }
     };
-
-    //save GPS data to database
-    public void setGPSData(LatLng node, boolean T){
-        //firebase date setting
-        db = FirebaseFirestore.getInstance();
-        LatLng fixednode =  new LatLng(37.49795, 127.0276189);
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-        Map<String, Object> data = new HashMap<>();
-        Map<String, Object> data2 = new HashMap<>();
-        if (T == true) {
-            data2.put("node", fixednode);
-            data2.put("time", formatter.format(date));
-            data.put("id", email);
-            data.put("Hnode", data2);
-
-            db.collection("GPS").document(email).set(data);
-            Log.d(TAG, "setGPSData: " + data);
-        } else {
-            data2.put("node", node);
-            data2.put("time", formatter.format(date));
-            db.collection("GPS").document(email)
-                    .update("destination", data2);
-        }
-    }
 
     public void Childcheck(){
         Log.d(TAG, "Childcheck : start" );
@@ -613,6 +592,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void run() {
                 timer.cancel();
             }
-        }, 1800000); //Shutdown after 1800 seconds
+        }, 18000); //Shutdown after 1800 seconds
     }
 }
