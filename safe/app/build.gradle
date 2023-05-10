@@ -38,10 +38,8 @@ android {
 }
 
 dependencies {
-    //네비게이션 바 /add dependency
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.0.0'
-    implementation 'androidx.navigation:navigation-ui:2.0.0'
+    //add dependency
+    //implementation 'com.google.android.material:material:1.0.0'
 
     //cluster map marker
     implementation 'com.google.maps.android:android-maps-utils:0.6.2'
@@ -56,9 +54,6 @@ dependencies {
     implementation project(':unityLibrary')
     implementation fileTree(dir: project(':unityLibrary').getProjectDir().toString() + ('\\libs'), include: ['*.jar'])
     compileOnly fileTree(dir: "unityLibrary/libs", include: ["*.jar"])
-
-    //server
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'

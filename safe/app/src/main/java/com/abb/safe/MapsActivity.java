@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,10 +38,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
@@ -85,6 +91,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String ctoGCheck;
     LatLng Currentnode;
     String[] NDataValue;
+    Marker marker;
+    int counter;
 
     //heatmap setting
     int[] colors = {
@@ -131,6 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         screenroute.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         screensetting.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -155,30 +166,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String location = searchView.getQuery().toString();
-                mMap.clear();
-                List<Address> addressList = null;
-                if (location != null || location.equals("")) {
-                    Geocoder geocoder = new Geocoder(MapsActivity.this);
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address = addressList.get(0); // Save GPS Values with Geocoding
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    setGPSData(latLng, false); //Save to location database (destination)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
-                    {
-                        @Override
-                        public boolean onMarkerClick(Marker arg0) {
-                            Log.d(TAG, "onMarkerClick: check");
-                            RouteDestination();
-                            return true;
+                try {
+                    String location = searchView.getQuery().toString();
+                    mMap.clear();
+                    List<Address> addressList = null;
+                    if (location != null || location.equals("")) {
+                        Geocoder geocoder = new Geocoder(MapsActivity.this);
+                        try {
+                            addressList = geocoder.getFromLocationName(location, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    });
+                        Address address = addressList.get(0); // Save GPS Values with Geocoding
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                        setGPSData(latLng, false); //Save to location database (destination)
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+                        {
+                            @Override
+                            public boolean onMarkerClick(Marker arg0) {
+                                Log.d(TAG, "onMarkerClick: check");
+                                RouteDestination();
+                                return true;
+                            }
+                        });
+                    }
+                } catch (Exception e){
+                    Toast.makeText(MapsActivity.this, "상세 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }
@@ -236,34 +251,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 mMap.clear();
-                DocumentReference docRef = db.collection("Safe").document(email);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d(TAG, "btn_near data: " + document.getData().getClass().getName());
-                                NDataValue = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
-                                double Nlat = 0;
-                                double Nlon = 0;
-                                for (int i = 0; i < NDataValue.length; i++) {
-                                    if (i % 2 == 0) {
-                                        Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
-                                    } else {
-                                        Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
-                                        mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
-                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
+                try {
+                    DocumentReference docRef = db.collection("Safe").document(email);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "btn_near data: " + document.getData().getClass().getName());
+                                    NDataValue = document.getData().toString().substring(1, document.getData().toString().length() - 1).split(", ");
+                                    double Nlat = 0;
+                                    double Nlon = 0;
+                                    for (int i = 0; i < NDataValue.length; i++) {
+                                        if (i % 2 == 0) {
+                                            Nlat = Double.parseDouble(NDataValue[i].split("=")[1].substring(1, NDataValue[i].split("=")[1].length()));
+                                        } else {
+                                            Nlon = Double.parseDouble(NDataValue[i].substring(0, NDataValue[i].length() - 1));
+                                            mMap.addMarker(new MarkerOptions().position(new LatLng(Nlat, Nlon)).title("근처 안전 요소"));
+                                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Nlat, Nlon), 16));
+                                        }
                                     }
+                                } else {
+                                    Log.d(TAG, "No such document");
                                 }
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
-                    }
-                });
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(MapsActivity.this, "근처에 안전시설이 없습니다.", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -460,9 +480,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //firebase date setting
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("node", new LatLng(37.497952, 127.0276189));
+        data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
         if (T == true) {
             data.put("id", email);
-            data.put("Hnode", node);
+            data.put("Hnode", data2);
             if (user != null) {
                 db.collection("GPS").document(email).set(data);
                 Log.d(TAG, "setGPSData: " + data);
@@ -551,28 +574,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //GPS location check
     public void ChildGPSshow(String cname, String cemail){
         Log.d(TAG, "ChildGPSshow : start");
+        counter = 1;
         DocumentReference docRef = db.collection("GPS").document(cemail);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Timer timer = new Timer();
+        TimerTask T1 = new TimerTask() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String data = document.getData().toString().substring(1, document.getData().toString().length()-1);
-                        String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
-                        double lat = Double.parseDouble(dList[0].split("=")[1]);
-                        double lon = Double.parseDouble(dList[1].split("=")[1]);
-                        Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
-                        LatLng childnode = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.child)));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode,16));
-                    } else {
-                        Log.d(TAG, "No such document");
+            public void run() {
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String data = document.getData().toString().substring(1, document.getData().toString().length() - 2);
+                                String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                                double lat = Double.parseDouble(dList[0].split("=")[1]);
+                                double lon = Double.parseDouble(dList[1].split("=")[1]);
+                                Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
+                                LatLng childnode = new LatLng(lat, lon);
+                                if (counter == 1){
+                                    marker = mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.checkchild)));
+                                    counter += 1;
+                                } else {
+                                    marker.setPosition(childnode);
+                                }
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 18));
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
+                });
             }
-        });
+        };
+        timer.schedule(T1, 0, 1500); //Timer1
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable()  {
+            public void run() {
+                timer.cancel();
+            }
+        }, 18000); //Shutdown after 1800 seconds
     }
 }
