@@ -36,6 +36,7 @@ public class RoutesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         screenroute.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +44,7 @@ public class RoutesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         screensetting.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,7 @@ public class RoutesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

@@ -23,7 +23,6 @@ import android.widget.Toast;
 import androidx.appcompat.widget.SearchView;
 
 import com.abb.safe.MyFunction.CustomClusterRenderer;
-import com.abb.safe.MyFunction.GPSsetting;
 import com.abb.safe.MyFunction.MyCluster;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,10 +38,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +108,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         //login ID save
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
@@ -126,8 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude = location.getLatitude();
                 Log.d(TAG, "GPS MapsAc: " + longitude + latitude);
                 Currentnode = new LatLng(latitude,longitude);
-                GPSsetting myDB = new GPSsetting();
-                myDB.setGPSData(Currentnode, true); //Save to location database
+                //setGPSData(Currentnode, true); //Save to location database
             }
             LocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,300f, locationListener);
         }
@@ -141,6 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         screenroute.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),RoutesActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
         screensetting.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -165,31 +166,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String location = searchView.getQuery().toString();
-                mMap.clear();
-                List<Address> addressList = null;
-                if (location != null || location.equals("")) {
-                    Geocoder geocoder = new Geocoder(MapsActivity.this);
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address = addressList.get(0); // Save GPS Values with Geocoding
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    GPSsetting myDB = new GPSsetting();
-                    myDB.setGPSData(latLng, false); //Save to location database (destination)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
-                    {
-                        @Override
-                        public boolean onMarkerClick(Marker arg0) {
-                            Log.d(TAG, "onMarkerClick: check");
-                            RouteDestination();
-                            return true;
+                try {
+                    String location = searchView.getQuery().toString();
+                    mMap.clear();
+                    List<Address> addressList = null;
+                    if (location != null || location.equals("")) {
+                        Geocoder geocoder = new Geocoder(MapsActivity.this);
+                        try {
+                            addressList = geocoder.getFromLocationName(location, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    });
+                        Address address = addressList.get(0); // Save GPS Values with Geocoding
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                        setGPSData(latLng, false); //Save to location database (destination)
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+                        {
+                            @Override
+                            public boolean onMarkerClick(Marker arg0) {
+                                Log.d(TAG, "onMarkerClick: check");
+                                RouteDestination();
+                                return true;
+                            }
+                        });
+                    }
+                } catch (Exception e){
+                    Toast.makeText(MapsActivity.this, "상세 주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }
@@ -467,10 +471,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
             LatLng node = new LatLng(latitude,longitude);
-            GPSsetting myDB = new GPSsetting();
-            myDB.setGPSData(node, true); //Save to location database
+            setGPSData(node, true); //Save to location database
         }
     };
+
+    //save GPS data to database
+    public void setGPSData(LatLng node, boolean T){
+        //firebase date setting
+        db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("node", new LatLng(37.497952, 127.0276189));
+        data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
+        if (T == true) {
+            data.put("id", email);
+            data.put("Hnode", data2);
+            if (user != null) {
+                db.collection("GPS").document(email).set(data);
+                Log.d(TAG, "setGPSData: " + data);
+            }
+        } else {
+            db.collection("GPS").document(email).update("destination", node);
+        }
+    }
 
     public void Childcheck(){
         Log.d(TAG, "Childcheck : start" );
@@ -557,33 +580,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TimerTask T1 = new TimerTask() {
             @Override
             public void run() {
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String data = document.getData().toString().substring(1, document.getData().toString().length() - 2);
-                            String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
-                            double lat = Double.parseDouble(dList[0].split("=")[1]);
-                            double lon = Double.parseDouble(dList[1].split("=")[1]);
-                            Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
-                            LatLng childnode = new LatLng(lat, lon);
-                            if (counter == 1){
-                                marker = mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.checkchild)));
-                                counter += 1;
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                String data = document.getData().toString().substring(1, document.getData().toString().length() - 2);
+                                String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                                double lat = Double.parseDouble(dList[0].split("=")[1]);
+                                double lon = Double.parseDouble(dList[1].split("=")[1]);
+                                Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
+                                LatLng childnode = new LatLng(lat, lon);
+                                if (counter == 1){
+                                    marker = mMap.addMarker(new MarkerOptions().position(childnode).title(cname + ": 위치").icon(BitmapDescriptorFactory.fromResource(R.drawable.checkchild)));
+                                    counter += 1;
+                                } else {
+                                    marker.setPosition(childnode);
+                                }
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 18));
                             } else {
-                                marker.setPosition(childnode);
+                                Log.d(TAG, "No such document");
                             }
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(childnode, 18));
                         } else {
-                            Log.d(TAG, "No such document");
+                            Log.d(TAG, "get failed with ", task.getException());
                         }
-                    } else {
-                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                }
-            });
+                });
             }
         };
         timer.schedule(T1, 0, 1500); //Timer1
