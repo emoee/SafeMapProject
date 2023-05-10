@@ -38,7 +38,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude = location.getLatitude();
                 Log.d(TAG, "GPS MapsAc: " + longitude + latitude);
                 Currentnode = new LatLng(latitude,longitude);
-                //setGPSData(Currentnode, true); //Save to location database
+                setGPSData(Currentnode, true); //Save to location database
             }
             LocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000,300f, locationListener);
         }
@@ -470,16 +472,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void setGPSData(LatLng node, boolean T){
         //firebase date setting
         db = FirebaseFirestore.getInstance();
+        LatLng fixednode =  new LatLng(37.49795, 127.0276189);
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
         Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data2 = new HashMap<>();
         if (T == true) {
+            data2.put("node", fixednode);
+            data2.put("time", formatter.format(date));
             data.put("id", email);
-            data.put("Hnode", node);
-            if (user != null) {
-                db.collection("GPS").document(email).set(data);
-                Log.d(TAG, "setGPSData: " + data);
-            }
+            data.put("Hnode", data2);
+
+            db.collection("GPS").document(email).set(data);
+            Log.d(TAG, "setGPSData: " + data);
         } else {
-            db.collection("GPS").document(email).update("destination", node);
+            data2.put("node", node);
+            data2.put("time", formatter.format(date));
+            db.collection("GPS").document(email)
+                    .update("destination", data2);
         }
     }
 
