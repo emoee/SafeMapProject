@@ -371,7 +371,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             String Route [] = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
                             double Rlat[] = new double[Route.length/2+1];
                             double Rlon[] = new double[Route.length/2+1];
-                            for (int i = 0; i< Route.length-1; i++){ //total 제외
+                            for (int i = 0; i< Route.length; i++){ //total 제외
                                 try {
                                     if (i%2 == 0){
                                         Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
@@ -403,12 +403,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<LatLng> RoutePoly = new ArrayList<>();
         for (int i = 0; i< Tlat.length-1; i++){
             RoutePoly.add(new LatLng(Tlat[i], Tlon[i]));
+            Log.d(TAG, "TmakePolyLine: " + Tlat[i] + " :: " + Tlon[i]);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Tlat[0], Tlon[0]),15));
         Polyline spolyline = mMap.addPolyline((new PolylineOptions())
                 .clickable(true)
                 .addAll(RoutePoly)
-                .color(Color.rgb(128, 0, 0 ))
+                .color(Color.rgb(0, 141, 98 ))
                 .width(27)
                 .clickable(true));
         spolyline.setStartCap(new RoundCap());
@@ -481,7 +482,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> data2 = new HashMap<>();
-        data2.put("node", new LatLng(37.497952, 127.0276189));
+        data2.put("node", new LatLng(37.498604424144, 127.02761093784272));
         data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
         if (T == true) {
             data.put("id", email);
