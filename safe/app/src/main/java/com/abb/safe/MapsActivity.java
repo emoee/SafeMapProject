@@ -485,7 +485,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> data2 = new HashMap<>();
-        data2.put("node", new LatLng(37.498604424144, 127.02761093784272));
+        data2.put("node", new LatLng(37.498604424144, 127.02761093784272)); //fixed location
         data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
         if (T == true) {
             data.put("id", email);
