@@ -113,6 +113,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
 
+        setGPSData(new LatLng(37.500246, 127.024570), true);
+
         // Save user current location
         final LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //permission check
@@ -371,7 +373,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             String Route [] = document.getData().toString().substring(1, document.getData().toString().length()-1).split(", ");
                             double Rlat[] = new double[Route.length/2+1];
                             double Rlon[] = new double[Route.length/2+1];
-                            for (int i = 0; i< Route.length-1; i++){ //total 제외
+                            for (int i = 0; i< Route.length; i++){ //total 제외
                                 try {
                                     if (i%2 == 0){
                                         Rlat[i/2] = Double.parseDouble(Route[i].split("latitude=")[1]);
@@ -408,7 +410,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Polyline spolyline = mMap.addPolyline((new PolylineOptions())
                 .clickable(true)
                 .addAll(RoutePoly)
-                .color(Color.rgb(128, 0, 0 ))
+                .color(Color.rgb(0, 141, 98 ))
                 .width(27)
                 .clickable(true));
         spolyline.setStartCap(new RoundCap());
@@ -464,6 +466,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         tileoverlay.clearTileCache();
     }
 
+
     //Update GPS values in 30 seconds
     final LocationListener locationListener = new LocationListener() {
         @Override
@@ -475,13 +478,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
+
     //save GPS data to database
     public void setGPSData(LatLng node, boolean T){
         //firebase date setting
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> data2 = new HashMap<>();
-        data2.put("node", new LatLng(37.497952, 127.0276189));
+        data2.put("node", new LatLng(37.498604424144, 127.02761093784272)); //fixed location
         data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
         if (T == true) {
             data.put("id", email);
@@ -587,9 +591,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 String data = document.getData().toString().substring(1, document.getData().toString().length() - 2);
-                                String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                                String[] dList = data.split("\\}, ")[0].split(", node=")[1].substring(1).split(", ");
                                 double lat = Double.parseDouble(dList[0].split("=")[1]);
-                                double lon = Double.parseDouble(dList[1].split("=")[1]);
+                                double lon = Double.parseDouble(dList[1].split("=")[1].substring(0,dList[1].split("=")[1].length()-1));
                                 Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
                                 LatLng childnode = new LatLng(lat, lon);
                                 if (counter == 1){
@@ -609,12 +613,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
             }
         };
-        timer.schedule(T1, 0, 1500); //Timer1
+        timer.schedule(T1, 0, 1000); //Timer1
         Handler mHandler = new Handler();
         mHandler.postDelayed(new Runnable()  {
             public void run() {
                 timer.cancel();
             }
-        }, 18000); //Shutdown after 1800 seconds
+        }, 30000); //Shutdown after 30 seconds
     }
 }

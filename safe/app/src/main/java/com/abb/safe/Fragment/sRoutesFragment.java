@@ -115,7 +115,7 @@ public class sRoutesFragment extends Fragment implements OnMapReadyCallback {
         Polyline sapolyline = googleMap.addPolyline((new PolylineOptions())
                 .clickable(true)
                 .addAll(Route)
-                .color(Color.rgb(0,128,0))
+                .color(Color.rgb(0, 141, 98 ))
                 .width(20)
                 .clickable(true));
         //polyline.setJointType(JointType.ROUND);

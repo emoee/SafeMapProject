@@ -113,7 +113,7 @@ public class dRoutesFragment extends Fragment implements OnMapReadyCallback {
         Polyline shpolyline = googleMap.addPolyline((new PolylineOptions())
                 .clickable(true)
                 .addAll(Route)
-                .color(Color.rgb(0, 0, 128))
+                .color(Color.rgb(0, 73, 140))
                 .width(20)
                 .clickable(true));
         //polyline.setJointType(JointType.ROUND);
