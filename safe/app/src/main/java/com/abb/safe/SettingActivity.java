@@ -30,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,10 +90,11 @@ public class SettingActivity extends AppCompatActivity {
                         double longitude = location.getLongitude();
                         double latitude = location.getLatitude();
                         Log.d(TAG, "GPS settingAc: " + longitude + latitude);
-                        Accusenode = new LatLng(latitude, longitude);
+                        Accusenode = new LatLng(37.498604424144, 127.02761093784272);
                         AccuseGPSData(Accusenode);
                     }
                 }
+
             }
         });
 
@@ -204,7 +206,10 @@ public class SettingActivity extends AppCompatActivity {
         //firebase date setting
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
-        data.put("Hnode", node);
+        Map<String, Object> data2 = new HashMap<>();
+        data2.put("node", new LatLng(37.492751, 127.032929));
+        data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
+        data.put("Hnode", data2);
         db.collection("Report").document(email).set(data);
         Toast.makeText(SettingActivity.this, "신고가 접수되었습니다.", Toast.LENGTH_LONG).show();
     }

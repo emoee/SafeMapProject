@@ -113,6 +113,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
 
+        setGPSData(new LatLng(37.500246, 127.024570), true);
+
         // Save user current location
         final LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //permission check
@@ -403,7 +405,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<LatLng> RoutePoly = new ArrayList<>();
         for (int i = 0; i< Tlat.length-1; i++){
             RoutePoly.add(new LatLng(Tlat[i], Tlon[i]));
-            Log.d(TAG, "TmakePolyLine: " + Tlat[i] + " :: " + Tlon[i]);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Tlat[0], Tlon[0]),15));
         Polyline spolyline = mMap.addPolyline((new PolylineOptions())
@@ -465,6 +466,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         tileoverlay.clearTileCache();
     }
 
+
     //Update GPS values in 30 seconds
     final LocationListener locationListener = new LocationListener() {
         @Override
@@ -475,6 +477,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setGPSData(node, true); //Save to location database
         }
     };
+
 
     //save GPS data to database
     public void setGPSData(LatLng node, boolean T){
@@ -588,9 +591,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 String data = document.getData().toString().substring(1, document.getData().toString().length() - 2);
-                                String[] dList = data.split("\\}, ")[0].split("Hnode=")[1].substring(1).split(", ");
+                                String[] dList = data.split("\\}, ")[0].split(", node=")[1].substring(1).split(", ");
                                 double lat = Double.parseDouble(dList[0].split("=")[1]);
-                                double lon = Double.parseDouble(dList[1].split("=")[1]);
+                                double lon = Double.parseDouble(dList[1].split("=")[1].substring(0,dList[1].split("=")[1].length()-1));
                                 Log.d(TAG, "ChildGPSshow onComplete: " + lat + lon);
                                 LatLng childnode = new LatLng(lat, lon);
                                 if (counter == 1){
@@ -610,12 +613,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 });
             }
         };
-        timer.schedule(T1, 0, 1500); //Timer1
+        timer.schedule(T1, 0, 1000); //Timer1
         Handler mHandler = new Handler();
         mHandler.postDelayed(new Runnable()  {
             public void run() {
                 timer.cancel();
             }
-        }, 18000); //Shutdown after 1800 seconds
+        }, 30000); //Shutdown after 30 seconds
     }
 }
