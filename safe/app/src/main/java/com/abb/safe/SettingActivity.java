@@ -66,6 +66,7 @@ public class SettingActivity extends AppCompatActivity {
         userBirth = findViewById(R.id.user_birth);
         gpsStatus = findViewById(R.id.gps_status);
         userData(); //update user account information
+
         //child location check and accuse button
         btn_checkChild = findViewById(R.id.btn_checkChild);
         btn_accuse = findViewById(R.id.btn_accuse);
@@ -90,7 +91,7 @@ public class SettingActivity extends AppCompatActivity {
                         double longitude = location.getLongitude();
                         double latitude = location.getLatitude();
                         Log.d(TAG, "GPS settingAc: " + longitude + latitude);
-                        Accusenode = new LatLng(37.498604424144, 127.02761093784272); //fixed location
+                        Accusenode = new LatLng(latitude, longitude);
                         AccuseGPSData(Accusenode);
                     }
                 }
@@ -207,7 +208,7 @@ public class SettingActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> data2 = new HashMap<>();
-        data2.put("node", new LatLng(37.492751, 127.032929)); //fixed location
+        data2.put("node", node);
         data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
         data.put("Hnode", data2);
         db.collection("Report").document(email).set(data);
