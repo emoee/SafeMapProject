@@ -113,8 +113,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         user = FirebaseAuth.getInstance().getCurrentUser();
         email = user.getEmail();
 
-        setGPSData(new LatLng(37.500246, 127.024570), true);
-
         // Save user current location
         final LocationManager LocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //permission check
@@ -321,9 +319,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
         mMap.setOnInfoWindowClickListener(clusterManager);
 
-        LatLng SEOUL = new LatLng(37.500246, 127.024570); //서울 서초 초등학교
+        //LatLng SEOUL = new LatLng(37.500246, 127.024570); //서울 서초 초등학교
         //LatLng SEOUL = new LatLng(37.477769, 126.983978); //사당역
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL,13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Currentnode,13));
 
     }
 
@@ -485,7 +483,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         db = FirebaseFirestore.getInstance();
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> data2 = new HashMap<>();
-        data2.put("node", new LatLng(37.498604424144, 127.02761093784272)); //fixed location
+        data2.put("node", node);
         data2.put("date", new SimpleDateFormat("MM-dd HH:mm:ss.SSS").format(System.currentTimeMillis()));
         if (T == true) {
             data.put("id", email);
